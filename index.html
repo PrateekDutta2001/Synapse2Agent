@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Synapse to Agent — the evolution of neural networks</title>
+  <meta name="description" content="A responsive field guide to the full cycle from biological neurons through perceptrons, deep learning, transformers, generative AI, large language models, and retrieval-augmented generation to agentic AI.">
+  <meta name="theme-color" content="#f3efe6">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231a1814'/%3E%3Ccircle cx='8' cy='16' r='3' fill='%23e39a62'/%3E%3Ccircle cx='24' cy='9' r='3' fill='%238fd0c4'/%3E%3Ccircle cx='24' cy='23' r='3' fill='%23f2ece3'/%3E%3Cpath d='M11 16h8M16 14l6-4M16 18l6 4' stroke='%23f2ece3' stroke-width='1.4' fill='none'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,560;9..144,640&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("nn-theme");
+        var theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#10120f" : "#f3efe6");
+      } catch (err) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <rect width="48" height="48" rx="14" fill="var(--mark)"/>
+        <circle cx="13" cy="24" r="4" fill="#e39a62"/>
+        <circle cx="34" cy="14" r="4" fill="#8fd0c4"/>
+        <circle cx="34" cy="34" r="4" fill="var(--bg)"/>
+        <path d="M17 24h10M27 22.2 33 15.5M27 25.8 33 32.5" stroke="var(--bg)" stroke-width="1.7" fill="none"/>
+      </svg>
+      <span class="brand-text">
+        <span class="brand-kicker">Field guide</span>
+        <span class="brand-name">Synapse to Agent</span>
+      </span>
+    </a>
+    <div class="header-actions">
+      <form class="search" role="search" action="#atlas" onsubmit="return false;">
+        <label class="visually-hidden" for="search-main">Search concepts</label>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16.5 20 20.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input id="search-main" data-search type="search" placeholder="Search the atlas" autocomplete="off">
+      </form>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3.2A8.5 8.5 0 1 0 20.8 14 7 7 0 0 1 15 3.2z" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4 17 7M7 17l-1.6 1.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span class="theme-label">Dark</span>
+      </button>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="drawer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Menu
+      </button>
+    </div>
+  </header>
+
+  <nav class="drawer" id="drawer" aria-label="Sections">
+    <form class="search" role="search" onsubmit="return false;">
+      <label class="visually-hidden" for="search-drawer">Search concepts</label>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16.5 20 20.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <input id="search-drawer" data-search type="search" placeholder="Search the atlas" autocomplete="off">
+    </form>
+    <a data-nav href="#cycle">Evolution cycle</a>
+    <a data-nav href="#map">Mutation map</a>
+    <a data-nav href="#neuron">01 Neuron</a>
+    <a data-nav href="#formal">02 Formal neuron</a>
+    <a data-nav href="#connectionist">03 Connectionism</a>
+    <a data-nav href="#deep">04 Deep learning</a>
+    <a data-nav href="#transformer">05 Transformers</a>
+    <a data-nav href="#generative">06 Generative AI</a>
+    <a data-nav href="#llm">07 Large language models</a>
+    <a data-nav href="#rag">08 Retrieval</a>
+    <a data-nav href="#agent">09 Agentic AI</a>
+    <a data-nav href="#references">References</a>
+  </nav>
+
+  <div class="shell" id="top">
+    <aside class="sidenav" aria-label="On this page">
+      <div class="sidenav-panel">
+        <a data-nav href="#cycle">Cycle <small>09</small></a>
+        <a data-nav href="#map">Map <small>All</small></a>
+        <a data-nav href="#neuron">Neuron <small>01</small></a>
+        <a data-nav href="#formal">Formal neuron <small>02</small></a>
+        <a data-nav href="#connectionist">Connectionism <small>03</small></a>
+        <a data-nav href="#deep">Deep learning <small>04</small></a>
+        <a data-nav href="#transformer">Transformers <small>05</small></a>
+        <a data-nav href="#generative">Generative AI <small>06</small></a>
+        <a data-nav href="#llm">Language models <small>07</small></a>
+        <a data-nav href="#rag">Retrieval <small>08</small></a>
+        <a data-nav href="#agent">Agentic AI <small>09</small></a>
+        <a data-nav href="#references">References <small>Src</small></a>
+      </div>
+    </aside>
+
+    <main id="main">
+      <header class="hero">
+        <p class="eyebrow">A complete evolution cycle</p>
+        <h1>From the firing neuron to the acting agent</h1>
+        <p class="lede">A neuron turns many weak inputs into one decision. An agent turns a goal into a sequence of decisions. Between them is one long circuit: a weighted signal, mutated in its architecture, its objective, and its interface, until it could represent, generate, retrieve, and act.</p>
+        <figure class="evo-film">
+          <p class="evo-hint">Swipe sideways to follow the whole circuit.</p>
+          <div class="evo-scroll">
+          <svg viewBox="0 0 1180 292" role="img" aria-labelledby="evo-title evo-desc">
+            <title id="evo-title">Evolution from neuron to agent</title>
+            <desc id="evo-desc">A signal travels from a biological neuron through the perceptron, hidden layers, deep learning, transformers, generative models, large language models, and retrieval, then an agent loop sends traces back to the start.</desc>
+            <path class="evo-rail" pathLength="100" d="M70 118 H1110 C1156 118 1156 228 1110 228 H70 C24 228 24 118 70 118"/>
+            <g class="evo-station" style="--i:0" transform="translate(70 118)">
+              <circle class="evo-ring" r="32"/>
+              <path class="evo-ink" d="M-22 -12 L-8 -3 M-24 0 H-8 M-22 12 L-8 3"/>
+              <circle class="evo-fill" r="7"/>
+              <path class="evo-ink" d="M7 0 H18"/>
+              <circle class="evo-accent" cx="22" cy="0" r="3.2"/>
+              <text class="evo-name" y="50">Neuron</text>
+              <text class="evo-year" y="66">Biology</text>
+            </g>
+            <g class="evo-station" style="--i:1" transform="translate(200 118)">
+              <circle class="evo-ring" r="32"/>
+              <circle class="evo-fill" cx="-16" cy="-10" r="3"/><circle class="evo-fill" cx="-16" cy="0" r="3"/><circle class="evo-fill" cx="-16" cy="10" r="3"/>
+              <path class="evo-ink" d="M-13 -10 H-2 M-13 0 H-2 M-13 10 H-2"/>
+              <rect class="evo-box" x="-2" y="-12" width="16" height="24" rx="5"/>
+              <text class="evo-sigma" x="6" y="5">Σ</text>
+              <path class="evo-ink" d="M14 0 H22"/>
+              <text class="evo-name" y="50">Perceptron</text>
+              <text class="evo-year" y="66">1943–1969</text>
+            </g>
+            <g class="evo-station" style="--i:2" transform="translate(330 118)">
+              <circle class="evo-ring" r="32"/>
+              <circle class="evo-fill" cx="-16" cy="-8" r="3.2"/><circle class="evo-fill" cx="-16" cy="8" r="3.2"/>
+              <circle class="evo-accent" cx="0" cy="-12" r="3.2"/><circle class="evo-accent" cx="0" cy="0" r="3.2"/><circle class="evo-accent" cx="0" cy="12" r="3.2"/>
+              <circle class="evo-fill" cx="16" cy="0" r="3.6"/>
+              <path class="evo-ink" d="M-13 -8 L-3 -12 M-13 -8 L-3 0 M-13 8 L-3 0 M-13 8 L-3 12 M3 -12 L13 0 M3 0 L13 0 M3 12 L13 0"/>
+              <text class="evo-name" y="50">Backprop</text>
+              <text class="evo-year" y="66">1974–1998</text>
+            </g>
+            <g class="evo-station" style="--i:3" transform="translate(460 118)">
+              <circle class="evo-ring" r="32"/>
+              <rect class="evo-box" x="-8" y="-18" width="14" height="7" rx="2"/>
+              <rect class="evo-box" x="-8" y="-7" width="14" height="7" rx="2"/>
+              <rect class="evo-box" x="-8" y="4" width="14" height="7" rx="2"/>
+              <rect class="evo-box" x="-8" y="15" width="14" height="7" rx="2"/>
+              <path class="evo-accent-line" d="M8 -14 C22 -14 22 18 8 18"/>
+              <text class="evo-name" y="50">Depth</text>
+              <text class="evo-year" y="66">2006–2016</text>
+            </g>
+            <g class="evo-station" style="--i:4" transform="translate(590 118)">
+              <circle class="evo-ring" r="32"/>
+              <path class="evo-accent-line" d="M-12 10 L0 -12 L12 10 L-12 10"/>
+              <circle class="evo-fill" cx="-12" cy="10" r="4"/><circle class="evo-fill" cx="0" cy="-12" r="4"/><circle class="evo-accent" cx="12" cy="10" r="4"/>
+              <text class="evo-name" y="50">Attention</text>
+              <text class="evo-year" y="66">2017–2019</text>
+            </g>
+            <g class="evo-station" style="--i:5" transform="translate(720 118)">
+              <circle class="evo-ring" r="32"/>
+              <path class="evo-ink" d="M0 -16 V-8 M0 8 V16 M-16 0 H-8 M8 0 H16 M-11 -11 L-6 -6 M11 -11 L6 -6 M-11 11 L-6 6 M11 11 L6 6"/>
+              <circle class="evo-accent" r="4.5"/>
+              <text class="evo-name" y="50">Generate</text>
+              <text class="evo-year" y="66">2014–2023</text>
+            </g>
+            <g class="evo-station" style="--i:6" transform="translate(850 118)">
+              <circle class="evo-ring" r="32"/>
+              <rect class="evo-box" x="-20" y="-12" width="40" height="24" rx="6"/>
+              <rect class="evo-token" x="-15" y="-6" width="7" height="12" rx="1.5"/>
+              <rect class="evo-token" x="-5" y="-6" width="7" height="12" rx="1.5"/>
+              <rect class="evo-token" x="5" y="-6" width="7" height="12" rx="1.5"/>
+              <text class="evo-name" y="50">LLM</text>
+              <text class="evo-year" y="66">2018–2026</text>
+            </g>
+            <g class="evo-station" style="--i:7" transform="translate(980 118)">
+              <circle class="evo-ring" r="32"/>
+              <rect class="evo-box" x="-20" y="-14" width="14" height="22" rx="2"/>
+              <path class="evo-ink" d="M-16 -6 H-10 M-16 0 H-10 M-16 6 H-12"/>
+              <path class="evo-accent-line" d="M-4 -2 H8"/>
+              <path class="evo-accent-line" d="M4 -6 L8 -2 L4 2"/>
+              <rect class="evo-box" x="8" y="-8" width="12" height="16" rx="2"/>
+              <text class="evo-name" y="50">RAG</text>
+              <text class="evo-year" y="66">2020–2026</text>
+            </g>
+            <g class="evo-station" style="--i:8" transform="translate(1110 118)">
+              <circle class="evo-ring" r="32"/>
+              <path class="evo-accent-line" d="M0 -15 a15 15 0 1 1 -6 2"/>
+              <path class="evo-accent-line" d="M-8 -16 L-2 -12 L-8 -8"/>
+              <circle class="evo-fill" r="4"/>
+              <text class="evo-name" y="50">Agent</text>
+              <text class="evo-year" y="66">2022–2026</text>
+            </g>
+            <text class="evo-return" x="590" y="268">Traces and preferences return to the next model</text>
+            <circle class="evo-halo" r="12">
+              <animateMotion dur="18s" repeatCount="indefinite" path="M70 118 H1110 C1156 118 1156 228 1110 228 H70 C24 228 24 118 70 118" calcMode="linear"/>
+            </circle>
+            <circle class="evo-orb" r="5.5">
+              <animateMotion dur="18s" repeatCount="indefinite" path="M70 118 H1110 C1156 118 1156 228 1110 228 H70 C24 228 24 118 70 118" calcMode="linear"/>
+            </circle>
+          </svg>
+          </div>
+          <figcaption>One signal walks the whole evolution, then the agent’s record flows back and the circuit begins again.</figcaption>
+        </figure>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#cycle">Walk the cycle</a>
+          <a class="btn btn-ghost" href="#references">Read the sources</a>
+        </div>
+        <ul class="hero-meta">
+          <li><strong>Nine stages</strong><span>Biology through agentic systems, with the hinge at the transformer.</span></li>
+          <li><strong>Three mutations</strong><span>What each stage keeps, what it changes, and what it makes possible.</span></li>
+          <li><strong>One stack</strong><span>Agents sit on retrieval, language models, transformers, and the old neuron.</span></li>
+        </ul>
+      </header>
+
+      <noscript>
+        <p class="note">The essays are in the page itself. Theme, search, and the cycle explorer need JavaScript.</p>
+      </noscript>
+
+      <section id="cycle" aria-labelledby="cycle-title">
+        <div class="section-head">
+          <p class="era-index">How to read the mutations</p>
+          <h2 id="cycle-title">The evolution cycle</h2>
+          <p>“Mutation” here is a teaching name for a real change in design, plus one literal branch where algorithms mutate network topologies. Each stage inherits a mechanism, alters it, and opens a problem the next stage has to face. The loop closes when agents produce new data, tool traces, and preferences that train the next model.</p>
+        </div>
+        <div class="cycle-layout">
+          <div class="cycle" role="list">
+            <button class="cycle-btn" type="button" data-stage="neuron" aria-pressed="true"><span class="cycle-num">01</span><span><strong>Biological neuron</strong><small>Spike, synapse, plasticity</small></span><span class="cycle-years">Origin</span></button>
+            <button class="cycle-btn" type="button" data-stage="formal" aria-pressed="false"><span class="cycle-num">02</span><span><strong>Formal neuron</strong><small>Threshold, perceptron, winter</small></span><span class="cycle-years">1943–1969</span></button>
+            <button class="cycle-btn" type="button" data-stage="connectionist" aria-pressed="false"><span class="cycle-num">03</span><span><strong>Connectionism</strong><small>Backprop, convnets, LSTM</small></span><span class="cycle-years">1974–1998</span></button>
+            <button class="cycle-btn" type="button" data-stage="deep" aria-pressed="false"><span class="cycle-num">04</span><span><strong>Deep learning</strong><small>Depth, embeddings, attention</small></span><span class="cycle-years">2006–2016</span></button>
+            <button class="cycle-btn" type="button" data-stage="transformer" aria-pressed="false"><span class="cycle-num">05</span><span><strong>Transformers</strong><small>Self-attention at scale</small></span><span class="cycle-years">2017–2019</span></button>
+            <button class="cycle-btn" type="button" data-stage="generative" aria-pressed="false"><span class="cycle-num">06</span><span><strong>Generative AI</strong><small>Sample, don’t only label</small></span><span class="cycle-years">2014–2023</span></button>
+            <button class="cycle-btn" type="button" data-stage="llm" aria-pressed="false"><span class="cycle-num">07</span><span><strong>Large language models</strong><small>Context as working memory</small></span><span class="cycle-years">2018–2026</span></button>
+            <button class="cycle-btn" type="button" data-stage="rag" aria-pressed="false"><span class="cycle-num">08</span><span><strong>RAG</strong><small>Read an outside source</small></span><span class="cycle-years">2020–2026</span></button>
+            <button class="cycle-btn" type="button" data-stage="agent" aria-pressed="false"><span class="cycle-num">09</span><span><strong>Agentic AI</strong><small>Plan, act, observe, repeat</small></span><span class="cycle-years">2022–2026</span></button>
+          </div>
+          <div class="mutation-panel" aria-live="polite">
+            <p class="panel-years" id="panel-years">Nervous systems · formalized 1906–1952</p>
+            <h3 id="panel-title">The biological neuron</h3>
+            <p id="panel-summary"></p>
+            <div class="triad">
+              <article class="inherit"><h4>Inherited</h4><ul id="panel-inherit"></ul></article>
+              <article class="mutate"><h4>Mutated</h4><ul id="panel-mutate"></ul></article>
+              <article class="open"><h4>Opened</h4><ul id="panel-open"></ul></article>
+            </div>
+            <p class="panel-more"><a id="panel-jump" href="#neuron">Open this stage</a></p>
+          </div>
+        </div>
+      </section>
+
+      <section id="map" aria-labelledby="map-title">
+        <div class="section-head">
+          <p class="era-index">The whole circuit on one table</p>
+          <h2 id="map-title">Mutation map</h2>
+          <p>Generative models run beside language models for several years, then fold into them. Retrieval and agents do not replace the transformer. They add memory and a control loop around it.</p>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>Stage</th><th>Core object</th><th>Learning signal</th><th>What changed</th><th>Limit that pushed forward</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Neuron</td><td>Cell and synapse</td><td>Co-activity, neuromodulators</td><td>Nothing artificial yet</td><td>Too slow and too embodied to copy directly</td></tr>
+              <tr><td>Perceptron</td><td>Weighted sum + threshold</td><td>Error or delta rule</td><td>Biology becomes arithmetic</td><td>No hidden layer; exclusive-or fails</td></tr>
+              <tr><td>Connectionism</td><td>Multilayer and recurrent nets</td><td>Backpropagation</td><td>Credit crosses hidden units and time</td><td>Depth is unstable; data and computers are thin</td></tr>
+              <tr><td>Deep learning</td><td>Convnets, residuals, embeddings</td><td>Still backprop, now practical</td><td>Features are learned, not designed</td><td>A recurrent step bottlenecks long context</td></tr>
+              <tr><td>Transformer</td><td>Self-attention block</td><td>Masked or next-token loss</td><td>Recurrence dropped; tokens attend in parallel</td><td>Quadratic cost; fluent text is not a database</td></tr>
+              <tr><td>Generative AI</td><td>Sampler of images, audio, text</td><td>Adversarial, variational, denoising, or likelihood</td><td>Objective shifts from labels to samples</td><td>Samples can be confident and untrue</td></tr>
+              <tr><td>LLM</td><td>Scaled causal transformer</td><td>Pretraining, then preferences</td><td>Prompt and context become the interface</td><td>Weights are stale, opaque, and costly to edit</td></tr>
+              <tr><td>RAG</td><td>Retriever + generator</td><td>Mostly frozen; the index updates</td><td>Facts move out of the weights</td><td>Someone must choose the query and the next step</td></tr>
+              <tr><td>Agent</td><td>Loop with tools and memory</td><td>Task success, traces, human stops</td><td>One answer becomes a policy over time</td><td>Actions have side effects; evaluation is harder</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="atlas" aria-labelledby="atlas-title">
+        <div class="section-head">
+          <p class="era-index">Every concept, still in historical order</p>
+          <h2 id="atlas-title">Concept atlas</h2>
+          <!-- <p>Filter by family or search by word. Press <kbd>/</kbd> Deeper notes sit inside each card.</p> -->
+        </div>
+        <form class="search search-inline" role="search" onsubmit="return false;">
+          <label class="visually-hidden" for="search-atlas">Search concepts</label>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16.5 20 20.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <input id="search-atlas" data-search type="search" placeholder="Search neurons, attention, RAG, agents…" autocomplete="off">
+        </form>
+        <div class="filters" role="toolbar" aria-label="Filter concepts">
+          <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="chip" type="button" data-filter="signal" aria-pressed="false">Signal</button>
+          <button class="chip" type="button" data-filter="learning" aria-pressed="false">Learning</button>
+          <button class="chip" type="button" data-filter="architecture" aria-pressed="false">Architecture</button>
+          <button class="chip" type="button" data-filter="memory" aria-pressed="false">Memory</button>
+          <button class="chip" type="button" data-filter="generation" aria-pressed="false">Generation</button>
+          <button class="chip" type="button" data-filter="action" aria-pressed="false">Action</button>
+        </div>
+        <p class="result-count" id="result-count" aria-live="polite"></p>
+        <button class="btn btn-ghost" id="expand-all" type="button">Open every deeper note</button>
+        <p class="empty" id="empty-state">Nothing in the atlas matches that filter. Clear the search or choose All.</p>
+      </section>
+
+      <section class="era" id="neuron" data-search="biological neuron dendrite axon synapse action potential hodgkin huxley hebb plasticity spike neurotransmitter">
+        <header class="era-head">
+          <p class="era-index">01 — Origin</p>
+          <h2>The biological neuron</h2>
+          <p class="era-years">Nervous systems are ancient · the spike was measured in the twentieth century</p>
+          <p class="era-intro">Before there is a network, there is a cell that collects evidence and sometimes commits to a spike. Later machines keep the outline — many inputs, one decision, a connection that can change — and throw away almost all of the wet detail. The detail still explains why those simplifications were chosen.</p>
+        </header>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 230" role="img" aria-labelledby="d1t d1d">
+            <title id="d1t">From dendrites to a synapse</title>
+            <desc id="d1d">Three dendrites meet a cell body. An axon carries the spike to a synaptic terminal on another cell.</desc>
+            <path class="wire" d="M40 50c40 10 70 40 90 70M40 115h110M40 180c40-10 70-40 90-70"/>
+            <circle class="node-accent" cx="168" cy="115" r="28"/>
+            <path class="pulse" d="M196 115h250"/>
+            <circle class="node" cx="470" cy="115" r="16"/>
+            <path class="wire" d="M486 115c30 0 40-30 70-30"/>
+            <circle class="node-teal" cx="580" cy="85" r="22"/>
+            <text x="150" y="120">Soma</text>
+            <text class="label-sm" x="40" y="38">Dendrites</text>
+            <text class="label-sm" x="280" y="104">Axon</text>
+            <text class="label-sm" x="548" y="90">Next cell</text>
+            <text class="label-sm" x="500" y="150">Synapse</text>
+          </svg>
+          <figcaption>A neuron sums local inputs at the soma. If the membrane crosses threshold, a spike travels the axon and, at the synapse, changes the odds that the next cell will fire.</figcaption>
+        </figure>
+        <div class="callout">
+          <h3>The pattern every later stage keeps</h3>
+          <p>Collect many signals. Weight them. Decide. If the outcome was useful, change the connection. Artificial networks are this loop with the chemistry removed.</p>
+        </div>
+        <div class="concept-grid">
+          <article class="concept" data-family="signal">
+            <p class="kicker">Anatomy</p>
+            <h3>Dendrites, soma, axon</h3>
+            <p>Dendrites are the input tree. The soma integrates them. The axon is the output cable, often wrapped in myelin so the spike jumps faster from gap to gap. One cell can listen to thousands of others and talk to thousands more.</p>
+            <p class="mech"><span>Mechanism</span> Direction of signal is mostly one way: in through dendrites, out through the axon. That one-way street is why the perceptron also treats inputs and outputs as different ports.</p>
+          </article>
+          <article class="concept" data-family="signal">
+            <p class="kicker">Physiology · 1952</p>
+            <h3>Resting potential and the action potential</h3>
+            <p>At rest the inside of the neuron is negative relative to the outside, near −70 millivolts. Hodgkin and Huxley showed that voltage-gated sodium and potassium channels open in sequence, producing a brief spike that travels without fading.</p>
+            <p class="mech"><span>Mechanism</span> Sodium rushes in, the membrane flips positive, potassium restores the negative rest. The spike is all-or-none: it happens or it does not. Rate and timing carry the information, not the height of a single spike.</p>
+            <details>
+              <summary>What the model dropped</summary>
+              <p>McCulloch and Pitts kept the threshold and discarded the ion channels. A modern unit outputs a continuous number, not a spike. Spiking neural networks are the research line that tries to put the spike back.</p>
+            </details>
+          </article>
+          <article class="concept" data-family="signal">
+            <p class="kicker">Junction</p>
+            <h3>The synapse</h3>
+            <p>Most synapses are chemical. The spike triggers neurotransmitter release. Receptors on the next cell open channels and produce a small excitatory or inhibitory postsynaptic potential. Electrical synapses exist too, but chemical synapses are where learning usually happens.</p>
+            <p class="mech"><span>Mechanism</span> Excitation pulls the next cell toward firing. Inhibition pulls it away. A weighted sum with positive and negative weights is the engineered version of that contest.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">Learning rule · 1949</p>
+            <h3>Hebbian plasticity</h3>
+            <p>Donald Hebb’s proposal: when one cell repeatedly helps fire another, the connection between them grows stronger. The slogan is “cells that fire together wire together.” Long-term potentiation and long-term depression are the measured versions, strengthening or weakening synapses with use.</p>
+            <p class="mech"><span>Mechanism</span> Change is local. The synapse does not need a teacher for the whole brain. It needs a coincidence of activity, often gated by neuromodulators such as dopamine when the coincidence mattered.</p>
+            <details>
+              <summary>The mutation into a rule</summary>
+              <p>Hebb is correlation. The delta rule, decades later, is correlation with an error. Backpropagation is that error sent backward through many layers. The locality is what gets strained: a biological synapse does not see a global loss function.</p>
+            </details>
+          </article>
+          <article class="concept" data-family="signal">
+            <p class="kicker">Code</p>
+            <h3>Rate, timing, and population codes</h3>
+            <p>A single spike is a poor message. Brains use firing rate, the precise time between spikes, and the pattern across a population. Artificial units usually keep only a rate-like number: the activation.</p>
+            <p class="mech"><span>Mechanism</span> Averaging spikes over a short window gives a continuous value. That average is the quiet ancestor of the real-valued activation in a network layer.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">Circuit</p>
+            <h3>Layers, maps, and recurrence</h3>
+            <p>Cortex is not a bag of identical cells. Sensory areas preserve maps of the world. Deeper areas mix those maps. Loops are everywhere: a cell’s output can return, through other cells, as a later input. Feed-forward drawings of the brain are a convenience.</p>
+            <p class="mech"><span>Mechanism</span> Local connectivity in visual cortex, described by Hubel and Wiesel, is the biological hint behind convolution. Recurrence in cortex is the hint behind RNNs, and later behind the agent loop that reads its own last action.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">Credit</p>
+            <h3>The credit-assignment problem</h3>
+            <p>If a movement succeeds, which of the millions of synapses should change? Brains appear to mix local plasticity, eligibility traces, and broadcast teaching signals. Engineers eventually answered a narrower version with the chain rule.</p>
+            <p class="mech"><span>Mechanism</span> An eligibility trace marks a synapse that was recently active, so a delayed reward can still find it. Temporal-difference learning in reinforcement learning is a formal cousin of that delay.</p>
+          </article>
+          <article class="concept wide" data-family="signal">
+            <p class="kicker">A boundary worth keeping</p>
+            <h3>A brain is not a trained artificial network</h3>
+            <p>Biological neurons spike, adapt, and live under a severe energy budget. They grow and prune. They sit in a body with hormones, sleep, and a world that pushes back. An artificial network is a differentiable function optimized against a chosen loss. The analogy is fertile. It is not an identity.</p>
+            <p class="mech"><span>Mechanism</span> Use the analogy to see what was inherited: weighted inputs, nonlinearity, plasticity, hierarchy, and memory. Do not use it to claim that a language model “has neurons” in the biological sense.</p>
+          </article>
+        </div>
+        <aside class="why">
+          <h3>Why this stage still sits under agents</h3>
+          <p>An agent’s tool call is a spike that leaves the system and returns as a new input. The weighted sum inside the model is still a soma. The index in a RAG system is an external memory the cell itself never had to hold. The biology is the source pattern, not the implementation.</p>
+        </aside>
+      </section>
+
+      <section class="era" id="formal" data-search="mcculloch pitts perceptron rosenblatt adaline widrow hoff xor minsky papert turing dartmouth ai winter delta rule">
+        <header class="era-head">
+          <p class="era-index">02 — Formal neuron · 1943–1969</p>
+          <h2>Thresholds, perceptrons, and the first winter</h2>
+          <p class="era-years">The cell becomes a formula, and the formula meets a wall</p>
+          <p class="era-intro">In a few decades the spike becomes a bit, the synapse becomes a weight, and learning becomes a rule for editing weights. The field also learns a negative result that will dominate the next argument: one layer of thresholds cannot compute exclusive-or. Depth is required. Training depth is not yet solved in public.</p>
+        </header>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 220" role="img" aria-labelledby="d2t d2d">
+            <title id="d2t">A perceptron unit</title>
+            <desc id="d2d">Inputs x1, x2, and x3 are multiplied by weights, summed with a bias, and passed through a threshold to yield y.</desc>
+            <circle class="node" cx="70" cy="40" r="18"/><text x="58" y="45">x1</text>
+            <circle class="node" cx="70" cy="110" r="18"/><text x="58" y="115">x2</text>
+            <circle class="node" cx="70" cy="180" r="18"/><text x="58" y="185">x3</text>
+            <path class="wire" d="M88 40c80 0 100 50 150 70M88 110h150M88 180c80 0 100-50 150-70"/>
+            <rect class="node-accent" x="250" y="78" width="150" height="64" rx="14"/>
+            <text x="268" y="106">Σ w·x + b</text>
+            <text class="label-sm" x="286" y="126">then threshold</text>
+            <path class="pulse" d="M400 110h150"/>
+            <circle class="node-teal" cx="590" cy="110" r="26"/><text x="578" y="115">y</text>
+          </svg>
+          <figcaption>The formal neuron multiplies each input by a weight, adds a bias, and fires if the total clears a threshold. Learning means changing the weights.</figcaption>
+        </figure>
+        <div class="callout">
+          <h3>The mutation</h3>
+          <p>Hebb’s coincidence becomes an error. If the unit’s answer disagrees with a teacher, nudge each weight in the direction that would have reduced the mistake. That is the delta rule. It only works, by itself, for a single layer.</p>
+        </div>
+        <div class="concept-grid">
+          <article class="concept" data-family="architecture">
+            <p class="kicker">1943</p>
+            <h3>McCulloch–Pitts neuron</h3>
+            <p>Warren McCulloch and Walter Pitts treated a neuron as logic. Inputs are 0 or 1. Some are excitatory, some inhibitory. If the sum of excitatory inputs meets a threshold and no inhibition vetoes it, the unit outputs 1. Networks of such units can, in principle, express any logical function.</p>
+            <p class="mech"><span>Mechanism</span> There is no learning rule in the 1943 paper. The weights are designed. The mutation is representational: thought, they argued, could be a finite network of thresholds.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">1950 and 1956</p>
+            <h3>Turing’s test and the Dartmouth bet</h3>
+            <p>Alan Turing asked whether a machine could imitate a human in conversation well enough to be indistinguishable in text. In 1955 John McCarthy, Marvin Minsky, Nathaniel Rochester, and Claude Shannon proposed a summer at Dartmouth on “artificial intelligence,” the name that stuck. The proposal expected a fast climb. The climb was not fast.</p>
+            <p class="mech"><span>Mechanism</span> Two traditions start together: symbolic search, and nets that learn. This atlas follows the nets. Search returns later inside agents, and earlier inside AlphaGo.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">1957–1958</p>
+            <h3>Rosenblatt’s perceptron</h3>
+            <p>Frank Rosenblatt built a machine that learned its weights from examples. A classic perceptron computes a weighted sum plus bias and applies a step function. If the two classes can be separated by a straight cut, the perceptron convergence theorem says the learning rule will find a separating set of weights.</p>
+            <p class="formula">y = 1 if w·x + b &gt; 0, else 0
+Δw = η (target − y) x</p>
+            <p class="mech"><span>Mechanism</span> The update adds a fraction of the input vector when the unit was too low, and subtracts it when the unit was too high. η is the learning rate, the size of the nudge.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">1960</p>
+            <h3>ADALINE and the LMS rule</h3>
+            <p>Bernard Widrow and Marcian Hoff’s ADALINE uses a linear output during learning and minimizes mean squared error. The least-mean-squares update is the delta rule in continuous form. It is the direct parent of the gradient step inside backpropagation.</p>
+            <p class="mech"><span>Mechanism</span> Instead of waiting for a hard threshold to be wrong, the rule looks at how far the weighted sum is from the target. Error becomes a number, not only a yes or no.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">Geometry</p>
+            <h3>Linear separability</h3>
+            <p>A single threshold unit cuts the input space with one hyperplane. AND and OR are separable. Exclusive-or is not: the positive cases sit on a diagonal, and no straight line puts both of them on one side. That picture is the whole crisis of the first era.</p>
+            <p class="mech"><span>Mechanism</span> A hidden layer builds new coordinates. In those coordinates, XOR becomes separable. The missing invention is a way to train the hidden weights.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">1969</p>
+            <h3>Minsky, Papert, and the winter</h3>
+            <p><em>Perceptrons</em> proved sharp limits of single-layer machines, including their trouble with parity and connectedness. The book was careful about what it had proved. The culture was less careful. Funding and fashion moved toward symbolic AI. The first AI winter is this social mutation as much as a mathematical one.</p>
+            <p class="mech"><span>Mechanism</span> The math did not say multilayer nets were useless. It said the learning rule in hand could not train them. The next mutation is the chain rule, already brewing in automatic differentiation.</p>
+            <details>
+              <summary>What survived the winter</summary>
+              <p>Weighted sums, thresholds, the delta rule, and the idea that a machine could learn a decision surface from examples. Those four pieces are still in every transformer block’s feed-forward layer.</p>
+            </details>
+          </article>
+          <article class="concept" data-family="signal">
+            <p class="kicker">Units</p>
+            <h3>Bias, features, and hand-built inputs</h3>
+            <p>Early nets rarely saw raw pixels. A person designed features — edges, frequencies, markers — and the perceptron weighted them. The bias is a weight on a constant input of 1, so the decision threshold can move without rewriting every other weight.</p>
+            <p class="mech"><span>Mechanism</span> Feature engineering is outsourced intelligence. Deep learning’s claim, much later, is that the hidden layers can learn those features. Agents outsource a different piece: actions in the world, through tools.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">A side branch</p>
+            <h3>Literal mutations: evolving topologies</h3>
+            <p>Most of this atlas uses “mutation” as a design metaphor. A real evolutionary line also exists. NEAT, from Stanley and Miikkulainen in 2002, mutates both weights and the graph of the network, adding neurons and links across generations. Neural architecture search, later, searches designs with reinforcement learning or evolution. They are cousins of the main backprop line, not its replacement.</p>
+            <p class="mech"><span>Mechanism</span> A population of networks is scored. The better graphs are copied. Random edits — mutations — and recombination propose the next generation. No gradient is required, which is why the method can search discrete wiring.</p>
+          </article>
+        </div>
+        <aside class="why">
+          <h3>What this stage hands forward</h3>
+          <p>The unit is now y = f(w·x + b). The open wound is hidden credit. Until that wound closes, “neural network” means a shallow classifier, not a representation machine.</p>
+        </aside>
+      </section>
+
+      <section class="era" id="connectionist" data-search="backpropagation rumelhart hinton williams werbos mlp hidden layer universal approximation hopfield boltzmann neocognitron lenet cnn rnn lstm gru vanishing gradient elman">
+        <header class="era-head">
+          <p class="era-index">03 — Connectionist return · 1974–1998</p>
+          <h2>Hidden layers, memory, and backpropagation</h2>
+          <p class="era-years">Credit learns to travel backward, and time gets a cell of its own</p>
+          <p class="era-intro">The second mutation is not a new neuron. It is a way to blame the right weights. Once error can flow through a hidden layer, networks can build internal features. Convolution shares those features across space. Recurrence shares them across time, until the signal fades — and the LSTM is invented so it does not have to fade.</p>
+        </header>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 230" role="img" aria-labelledby="d3t d3d">
+            <title id="d3t">A multilayer perceptron</title>
+            <desc id="d3d">Three input units connect to four hidden units, which connect to two outputs. Error is sent backward along the same wires.</desc>
+            <g>
+              <circle class="node" cx="80" cy="40" r="14"/><circle class="node" cx="80" cy="110" r="14"/><circle class="node" cx="80" cy="180" r="14"/>
+              <circle class="node-accent" cx="280" cy="30" r="14"/><circle class="node-accent" cx="280" cy="85" r="14"/><circle class="node-accent" cx="280" cy="140" r="14"/><circle class="node-accent" cx="280" cy="195" r="14"/>
+              <circle class="node-teal" cx="480" cy="75" r="16"/><circle class="node-teal" cx="480" cy="155" r="16"/>
+            </g>
+            <path class="wire" d="M94 40h172M94 40c40 20 90 40 172 45M94 110h172M94 110c30-30 80-70 172-80M94 180h172M94 180c40-20 80-30 172-40"/>
+            <path class="pulse" d="M294 85h170M294 140h170"/>
+            <text class="label-sm" x="48" y="24">Input</text>
+            <text class="label-sm" x="236" y="16">Hidden</text>
+            <text class="label-sm" x="500" y="78">Output</text>
+            <text class="label-sm" x="520" y="150">Error returns along the wires</text>
+          </svg>
+          <figcaption>Hidden units are not told what to be. Backpropagation adjusts them so the final error shrinks. That is how a network learns a representation instead of only a cut.</figcaption>
+        </figure>
+        <div class="callout">
+          <h3>The mutation</h3>
+          <p>The delta rule now uses the chain rule. Each layer receives a gradient: how the final loss would change if this unit’s output changed a little. Multiply by the local slope of the activation, and the blame reaches the earliest weights.</p>
+        </div>
+        <div class="concept-grid">
+          <article class="concept" data-family="learning">
+            <p class="kicker">1970–1986</p>
+            <h3>Backpropagation’s long arrival</h3>
+            <p>Seppo Linnainmaa described reverse-mode differentiation in 1970, published in English form in 1976. Paul Werbos applied the idea to neural nets in his 1974 thesis. David Rumelhart, Geoffrey Hinton, and Ronald Williams made it the working method of the field in 1986. The algorithm was old before it was famous.</p>
+            <p class="formula">∂L/∂w = (∂L/∂y) · (∂y/∂z) · (∂z/∂w)
+z = w·x + b,   y = f(z)</p>
+            <p class="mech"><span>Mechanism</span> A forward pass stores the activations. A backward pass multiplies Jacobians from the loss back to each weight. One backward pass costs about the same as one forward pass, which is why training is thinkable at all.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">Representation</p>
+            <h3>Hidden layers and internal features</h3>
+            <p>A hidden unit is a learned feature. Early units might detect a stroke. Later units might detect a loop or a spacing pattern. Nobody labels the hidden units. The loss on the final answer is enough pressure, if the net is shaped so that gradients survive.</p>
+            <p class="mech"><span>Mechanism</span> Distributed representation means one concept is a pattern across many units, and one unit joins many concepts. That idea passes intact into word embeddings and into the residual stream of a transformer.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">1989</p>
+            <h3>Universal approximation, and what it does not say</h3>
+            <p>George Cybenko proved that a single hidden layer of sigmoids, given enough units, can approximate any continuous function on a closed bounded set as closely as you like. Similar results followed for other activations. The theorem is an existence proof.</p>
+            <p class="mech"><span>Mechanism</span> It does not say the weights can be found by gradient descent. It does not say one layer is efficient. Depth is often exponentially more compact for the same function. The theorem ended the “nets cannot represent it” objection. It left the “nets cannot learn it” problem standing.</p>
+          </article>
+          <article class="concept" data-family="signal">
+            <p class="kicker">Nonlinearity</p>
+            <h3>Sigmoid and tanh</h3>
+            <p>Without a nonlinearity, a stack of layers collapses into one linear map. The logistic sigmoid squashes any real number into (0, 1). Tanh squashes into (−1, 1) and is centered, which often trains more easily. Both saturate: far from zero, their slope is nearly zero, and the gradient dies.</p>
+            <p class="formula">sigmoid(z) = 1 / (1 + e^(−z))
+tanh(z) = (e^z − e^(−z)) / (e^z + e^(−z))</p>
+            <p class="mech"><span>Mechanism</span> Saturation is the seed of the vanishing-gradient crisis. ReLU, in the next era, mutates the curve into a hinge that does not flatten for positive inputs.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">1982–1985</p>
+            <h3>Hopfield nets and Boltzmann machines</h3>
+            <p>John Hopfield described a recurrent net with an energy that decreases until the pattern settles, a content-addressable memory. The Boltzmann machine of Ackley, Hinton, and Sejnowski adds hidden units and learns by comparing a data-driven equilibrium with a free-running one. Energy-based models are the grandmother of today’s score-based and diffusion views.</p>
+            <p class="mech"><span>Mechanism</span> Memory here is a stable state, not a slot. You give a fragment; the net completes it. That completion instinct returns in masked language models and in denoising diffusion.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">1980–1998</p>
+            <h3>Neocognitron, convolution, and LeNet</h3>
+            <p>Kunihiko Fukushima’s neocognitron stacked local detectors and pooled them so a small shift did not change the answer. Yann LeCun and colleagues made the idea differentiable: convolutional layers share one small filter across the image, and pooling compresses space. LeNet-5, published in 1998, read handwritten digits well enough to matter for checks.</p>
+            <p class="mech"><span>Mechanism</span> Weight sharing is the mutation. A fully connected net would relearn “edge” at every location. A convolution learns it once. The inductive bias matches the world: nearby pixels belong together, and a digit is still a digit if it slides a few pixels.</p>
+          </article>
+          <article class="concept" data-family="memory">
+            <p class="kicker">1990</p>
+            <h3>Recurrent networks</h3>
+            <p>Jeffrey Elman’s simple recurrent net feeds its own hidden state back as the next input, so the order of words can matter. Michael Jordan had already studied nets with output feedback. Backpropagation through time unrolls the loop and applies the chain rule along the steps.</p>
+            <p class="mech"><span>Mechanism</span> The hidden state is a learned summary of the past. It is also a bottleneck. Everything important about a long sentence has to survive inside a fixed vector that is rewritten every step.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">A disease of depth and time</p>
+            <h3>Vanishing and exploding gradients</h3>
+            <p>If each step multiplies the gradient by a number smaller than one, a hundred steps leave almost nothing. If the number is larger than one, the gradient explodes. Sigmoid slopes below 1, and repeated matrix multiplies in time, make long credit assignment fragile. Sepp Hochreiter studied this failure directly.</p>
+            <p class="mech"><span>Mechanism</span> Exploding gradients can be clipped. Vanishing gradients need an architectural mutation, not only a smaller learning rate. Residuals and LSTMs are those mutations.</p>
+          </article>
+          <article class="concept wide" data-family="memory">
+            <p class="kicker">1997, forget gate in 2000</p>
+            <h3>LSTM, then GRU</h3>
+            <p>Hochreiter and Schmidhuber’s long short-term memory adds a cell state that runs forward with only light edits. Input and output gates decide what to write and what to reveal. Gers, Schmidhuber, and Cummins added the forget gate in 2000, so the cell can clear itself. Cho and colleagues’ gated recurrent unit, in 2014, folds the idea into fewer gates.</p>
+            <p class="formula">The cell is closer to c ← f ⊙ c + i ⊙ g
+than to h ← tanh(W h + U x)
+Gates f and i are between 0 and 1. ⊙ is elementwise multiply.</p>
+            <p class="mech"><span>Mechanism</span> A gate near 1 lets the old memory pass unchanged, so the gradient has a path that is not multiplied by a tiny sigmoid slope at every step. This is the same instinct as a residual connection: offer an identity path.</p>
+            <details>
+              <summary>What the transformer will discard</summary>
+              <p>LSTMs were the state of the art for translation and speech. Their limit is sequential: step t must finish before step t+1 starts. Self-attention keeps the memory and throws away the forced order of computation.</p>
+            </details>
+          </article>
+        </div>
+        <aside class="why">
+          <h3>What this stage hands forward</h3>
+          <p>The field now owns differentiable memory, local detectors, and a general training algorithm. It does not yet own enough data, enough regularization, or enough stable depth. The next era is mostly about making this era’s ideas train.</p>
+        </aside>
+      </section>
+
+      <section class="era" id="deep" data-search="deep learning alexnet relu dropout batch norm resnet adam word2vec glove seq2seq attention bahdanau imagenet gpu embedding alphago">
+        <header class="era-head">
+          <p class="era-index">04 — Deep revival · 2006–2016</p>
+          <h2>Depth becomes trainable</h2>
+          <p class="era-years">From a pretraining trick to ImageNet, embeddings, and the first attention</p>
+          <p class="era-intro">The pieces existed. What changes is that deep stacks start to win on public benchmarks, on GPUs, with new nonlinearities and regularizers. Language leaves hand-built grammars for vectors you can add. And just before the transformer, attention teaches a decoder to look back at the encoder instead of trusting one summary vector.</p>
+        </header>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 220" role="img" aria-labelledby="d4t d4d">
+            <title id="d4t">Attention over an encoder</title>
+            <desc id="d4d">A decoder state scores each encoder state, softmax turns scores into weights, and the weighted sum is a context vector.</desc>
+            <rect class="node" x="40" y="30" width="70" height="36" rx="8"/><rect class="node" x="40" y="90" width="70" height="36" rx="8"/><rect class="node" x="40" y="150" width="70" height="36" rx="8"/>
+            <text class="label-sm" x="52" y="52">h1</text><text class="label-sm" x="52" y="112">h2</text><text class="label-sm" x="52" y="172">h3</text>
+            <path class="wire" d="M110 48h80M110 108h80M110 168h80"/>
+            <rect class="node-accent" x="200" y="78" width="150" height="64" rx="12"/>
+            <text x="228" y="106">scores</text>
+            <text class="label-sm" x="214" y="126">softmax weights</text>
+            <path class="pulse" d="M350 110h120"/>
+            <rect class="node-teal" x="480" y="78" width="160" height="64" rx="12"/>
+            <text x="512" y="106">context</text>
+            <text class="label-sm" x="500" y="126">Σ weight · h</text>
+          </svg>
+          <figcaption>Bahdanau attention replaces “remember the whole sentence in one vector” with “look up the relevant encoder states while you write.”</figcaption>
+        </figure>
+        <div class="callout">
+          <h3>The mutation</h3>
+          <p>Features stop being a human craft. A stack of learned layers becomes the feature engineer. Attention then mutates memory: the past stays addressable instead of being crushed into the recurrent state.</p>
+        </div>
+        <div class="concept-grid">
+          <article class="concept" data-family="learning">
+            <p class="kicker">2006</p>
+            <h3>Layer-wise pretraining</h3>
+            <p>Hinton, Osindero, and Teh showed that a deep belief net could be grown one restricted Boltzmann machine at a time, then fine-tuned. The cultural effect was larger than the specific model. Depth was thinkable again. End-to-end supervised training soon overtook the unsupervised prelude, once ReLU, initialization, and data arrived.</p>
+            <p class="mech"><span>Mechanism</span> Pretraining puts the weights near a sensible region so the later gradient steps do not start in a flat desert. Self-supervised language modeling, years later, is the same instinct with a better pretext task.</p>
+          </article>
+          <article class="concept" data-family="signal">
+            <p class="kicker">Nonlinearity</p>
+            <h3>ReLU and its relatives</h3>
+            <p>A rectified linear unit outputs max(0, z). For positive inputs the slope is 1, so gradients do not shrink just because the unit is active. Leaky ReLU leaves a small slope on the negative side so a unit is less likely to die at zero forever. ELU, GELU, and Swish smooth the hinge. GELU becomes the default inside transformers.</p>
+            <p class="mech"><span>Mechanism</span> ReLU is cheap and sparse: many units output exact zero. The cost is a dead unit whose input is always negative and whose gradient is always zero. Better initialization and variants reduce that.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">2012</p>
+            <h3>AlexNet and the ImageNet moment</h3>
+            <p>Alex Krizhevsky, Ilya Sutskever, and Geoffrey Hinton won ImageNet 2012 with a deep convolutional net on GPUs, using ReLU, dropout, and heavy data augmentation. The error drop against the previous hand-built vision pipelines was large enough to redirect the field. “Deep learning” becomes the name of the winning practice, not only of a 2006 paper.</p>
+            <p class="mech"><span>Mechanism</span> Three scarcities ease at once: compute (GPU matrix multiplies), data (a million labeled images), and optimization hygiene (ReLU, dropout, augmentation). Architecture matters. The surrounding recipe matters as much.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">2014–2016</p>
+            <h3>VGG, Inception, ResNet, DenseNet</h3>
+            <p>VGG shows that stacking small 3×3 convolutions is a clean way to get depth. Inception runs several filter sizes in parallel. ResNet’s skip connection adds the layer’s input to its output, so a layer only has to learn a residual change. DenseNet concatenates every earlier map into the later ones. Residual links are the mutation that sticks: they reappear in every transformer block.</p>
+            <p class="formula">y = x + F(x)
+F is the stacked layers. The gradient can travel through the + x path unchanged.</p>
+            <p class="mech"><span>Mechanism</span> If F learns zero, the block is an identity. Optimization may stay near that safe path and add only the changes that help. Depth of 50, 101, or 152 layers becomes ordinary.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">Stabilizers</p>
+            <h3>Dropout, batch norm, initialization</h3>
+            <p>Dropout randomly zeros activations during training so no unit can rely on a specific partner. Batch normalization rescales each minibatch to a steady mean and variance, which lets learning rates rise. Xavier initialization matches the variance of sigmoid layers. He initialization does the same for ReLU. These are not glamorous. They are why deep nets stopped being a coin flip.</p>
+            <p class="mech"><span>Mechanism</span> Training fails when activation variance explodes or collapses with depth. Init sets the starting variance. Norm layers hold it in place. Dropout is a noise source that acts as a regularizer.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">Optimizers</p>
+            <h3>From SGD to AdamW</h3>
+            <p>Stochastic gradient descent steps against the gradient of a minibatch. Momentum adds a velocity so the step keeps going through small ravines. AdaGrad accumulates squared gradients and shrinks steps on noisy coordinates. RMSProp, from Hinton’s course, uses a moving average instead of a sum that never forgets. Adam combines momentum with that average. AdamW, from Loshchilov and Hutter, decouples weight decay from the adaptive step so regularization behaves as intended.</p>
+            <p class="formula">θ ← θ − η · m̂ / (√v̂ + ε)
+m̂ is bias-corrected momentum. v̂ is bias-corrected second moment.</p>
+            <p class="mech"><span>Mechanism</span> Adaptive methods give each weight its own effective learning rate. They are the default starting point for transformers. Careful SGD with momentum still wins some vision problems. The optimizer is part of the model’s upbringing, not a neutral tool.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">Objectives</p>
+            <h3>Losses, softmax, and regularization</h3>
+            <p>Regression often uses mean squared error. Classification uses cross-entropy after a softmax, which turns scores into a distribution that sums to one. L2 weight decay punishes large weights. Label smoothing stops the model from chasing a probability of exactly 1. Early stopping halts when a held-out set stops improving. Data augmentation invents new examples by crop, flip, noise, or synonym.</p>
+            <p class="formula">softmax(z)_i = e^(z_i) / Σ_j e^(z_j)
+cross-entropy = − Σ target · log(prediction)</p>
+            <p class="mech"><span>Mechanism</span> The loss is the only teacher. Change the loss and you change what “good” means. That is why the later jump from classification to next-token prediction changes the entire product, even when the block stays a transformer.</p>
+          </article>
+          <article class="concept" data-family="memory">
+            <p class="kicker">2013–2014</p>
+            <h3>Word2Vec, GloVe, and distributional meaning</h3>
+            <p>Mikolov and colleagues train a small net so a word predicts its neighbors, or the neighbors predict the word. The hidden weights become a vector for each word. Pennington, Socher, and Manning’s GloVe factorizes a global co-occurrence matrix instead. The distributional hypothesis underneath both: you know a word by the company it keeps. Famous offsets — the vector for king minus man plus woman landing near queen — showed that directions in the space can act like relations.</p>
+            <p class="mech"><span>Mechanism</span> Meaning becomes geometry. Tokens in a transformer still start as a row in an embedding table. The table is now trained jointly with the rest of the model, not frozen from Word2Vec, but the idea is the same lookup.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">2014</p>
+            <h3>Sequence to sequence</h3>
+            <p>Sutskever, Vinyals, and Le encode an input sentence with one LSTM and decode the translation with another, conditioned on the encoder’s final state. Teacher forcing feeds the true previous word during training. The final-state bottleneck is obvious on long sentences: one vector cannot hold every name and number.</p>
+            <p class="mech"><span>Mechanism</span> The encoder is a compressor. The decoder is a conditional generator. That split survives in encoder–decoder transformers, and the generator half survives alone in GPT-style models.</p>
+          </article>
+          <article class="concept wide" data-family="memory">
+            <p class="kicker">2014–2015 · the bridge</p>
+            <h3>Bahdanau attention</h3>
+            <p>Dzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio let the decoder compute a score against every encoder state, turn the scores into weights with softmax, and read a weighted sum. Alignment becomes soft and differentiable. Luong and colleagues soon compare other score functions. The decoder no longer has to remember the source in its recurrent state. It can look it up.</p>
+            <p class="formula">α_t = softmax(score(decoder_t, encoder_states))
+context_t = Σ α_t,i · encoder_i</p>
+            <p class="mech"><span>Mechanism</span> This is still cross-attention: the decoder queries, the encoder provides keys and values, though those names arrive with the transformer. Self-attention is the next mutation, where a sequence queries itself.</p>
+            <details>
+              <summary>The other bridge: AlphaGo</summary>
+              <p>In 2016 AlphaGo beat a world-class Go player with deep networks plus Monte Carlo tree search. The policy net proposes moves. The value net judges positions. Search supplies deliberation the net does not do in one pass. Agent loops, and later test-time reasoning, are this partnership in a new costume: a model proposes, an outer procedure spends extra steps.</p>
+            </details>
+          </article>
+        </div>
+        <aside class="why">
+          <h3>What this stage hands forward</h3>
+          <p>Representation learning is no longer a promise. Vision has residual convnets. Language has embeddings, sequence models, and a lookup called attention. The recurrence is the part about to be cut.</p>
+        </aside>
+      </section>
+
+      <section class="era" id="transformer" data-search="transformer self-attention multi-head positional encoding bert gpt t5 bart vit rope alibi tokenization bpe scaling laws mixture of experts layernorm residual">
+        <header class="era-head">
+          <p class="era-index">05 — The hinge · 2017–2019</p>
+          <h2>Transformers</h2>
+          <p class="era-years">Attention is no longer an accessory. It is the whole sequence model.</p>
+          <p class="era-intro">“Attention Is All You Need” replaces the recurrent step with self-attention. Every token can look at every other token, in parallel, in one block. Position has to be added back in, because a set of tokens has no order of its own. Within two years the same block is a bidirectional reader, a left-to-right writer, a text-to-text worker, and the seed of a vision model.</p>
+        </header>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 250" role="img" aria-labelledby="d5t d5d">
+            <title id="d5t">One transformer block</title>
+            <desc id="d5d">Tokens enter, multi-head attention mixes them, a residual add and layer norm follow, then a feed-forward network, another residual, and the block output.</desc>
+            <rect class="node" x="30" y="96" width="90" height="48" rx="10"/>
+            <text class="label-sm" x="48" y="124">tokens</text>
+            <path class="pulse" d="M120 120h50"/>
+            <rect class="node-accent" x="180" y="78" width="150" height="84" rx="12"/>
+            <text x="198" y="112">multi-head</text>
+            <text class="label-sm" x="206" y="132">attention</text>
+            <path class="wire" d="M330 120h40"/>
+            <rect class="node" x="380" y="96" width="70" height="48" rx="10"/>
+            <text class="label-sm" x="400" y="124">+ norm</text>
+            <path class="wire" d="M450 120h30"/>
+            <rect class="node-teal" x="490" y="78" width="120" height="84" rx="12"/>
+            <text x="518" y="112">feed</text>
+            <text class="label-sm" x="512" y="132">forward</text>
+            <path class="wire" d="M610 120h40"/>
+            <rect class="node" x="640" y="96" width="60" height="48" rx="10"/>
+            <text class="label-sm" x="656" y="124">out</text>
+            <text class="label-sm" x="180" y="190">Each token builds a query, a key, and a value</text>
+          </svg>
+          <figcaption>A block mixes tokens with attention, then lets each token think alone in a small feed-forward net. Residuals and layer norm keep the stack trainable. A model is this block repeated.</figcaption>
+        </figure>
+        <div class="callout">
+          <h3>The mutation</h3>
+          <p>The recurrent state is discarded as the carrier of memory. Memory becomes a direct lookup among positions. The feed-forward layer inside the block is still the old neuron: a weighted sum, a nonlinearity, and another weighted sum, applied at each token.</p>
+        </div>
+        <div class="concept-grid">
+          <article class="concept" data-family="architecture">
+            <p class="kicker">The operation</p>
+            <h3>Scaled dot-product attention</h3>
+            <p>Each token is projected into a query, a key, and a value. The query asks. The key is the label on another token. The value is the content that gets read. Similarity is a dot product. Softmax turns similarities into a distribution. The output is a weighted sum of values.</p>
+            <p class="formula">Attention(Q, K, V) = softmax(Q Kᵀ / √d) V</p>
+            <p class="mech"><span>Mechanism</span> Dividing by the square root of the key dimension keeps the dots from growing so large that softmax saturates. A causal mask sets future scores to negative infinity so a language model cannot see tokens it has not “written” yet.</p>
+            <details>
+              <summary>Cost</summary>
+              <p>Full attention compares every pair of tokens. Time and memory grow with the square of the sequence length. That single fact is why context windows were expensive, why sparse and linear attention were researched, and why a long prompt is not a free lunch.</p>
+            </details>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">Parallel relations</p>
+            <h3>Multi-head attention</h3>
+            <p>One head might track syntax, another a name, another a number agreeing with a verb. Multi-head attention runs several attention patterns in smaller dimensions and concatenates them. The model does not have to spend its only lookup on one kind of relation.</p>
+            <p class="mech"><span>Mechanism</span> Heads are not guaranteed to be interpretable. Some are sharp, some are diffuse, some copy the previous token. The point of the mutation is capacity: several soft alignments at once, learned from the loss, not assigned by a linguist.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">Order</p>
+            <h3>Positional encoding</h3>
+            <p>Attention is permutation-equivariant: shuffle the tokens and the outputs shuffle the same way. Language is not like that. The original transformer adds sinusoidal position vectors. Later models learn a position table, rotate queries and keys with RoPE so relative offset is a rotation, or add a distance penalty with ALiBi. RoPE and ALiBi are the mutations that made longer contexts easier to extend.</p>
+            <p class="mech"><span>Mechanism</span> Absolute encodings name each index. Relative methods care how far two tokens are. Rotary embeddings bake the offset into the dot product itself, which is why they became the default in modern language models.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">The block</p>
+            <h3>Residuals, layer norm, pre-norm</h3>
+            <p>Around attention and around the feed-forward net, the block adds its input back. Layer norm rescales each token’s features. The original paper puts norm after the residual branch. Later practice, analyzed by Xiong and colleagues, puts norm inside the branch before attention and the feed-forward net. Pre-norm stacks train more quietly at the depths language models need.</p>
+            <p class="formula">x ← x + Attention(Norm(x))
+x ← x + FeedForward(Norm(x))</p>
+            <p class="mech"><span>Mechanism</span> The residual stream is a running vector per token. Attention and the feed-forward layer read it and write an update. That picture, popularized by later interpretability work, is the cleanest way to see a transformer as a program of additions.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">Still a neuron</p>
+            <h3>The position-wise feed-forward net</h3>
+            <p>After tokens have looked at each other, each position passes through the same two-layer network: expand, activate with GELU or SwiGLU, project back. There is no talking between positions inside this layer. It is a private computation, shared across positions the way a convolution is shared across space.</p>
+            <p class="mech"><span>Mechanism</span> Expansion, often to four times the width, gives the block a high-dimensional scratch space. Many researchers read these layers as key–value memories: the first matrix matches a pattern, the second writes an update. The McCulloch–Pitts unit is still in here, widened and smoothed.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">Three shapes</p>
+            <h3>Encoder, decoder, and both</h3>
+            <p>An encoder uses bidirectional self-attention. BERT is the landmark: mask some tokens and reconstruct them. A decoder uses causal self-attention. GPT is the landmark: predict the next token forever. An encoder–decoder, as in the original translation model, T5, and BART, lets the decoder cross-attend to a full encoding of the input. T5 casts every task as text to text. BART corrupts a document and asks the model to restore it.</p>
+            <p class="mech"><span>Mechanism</span> Bidirectional models are strong readers. Causal models are generators, and generation turned out to scale into a general interface. The field’s center of gravity moved to the decoder even though the 2017 paper was an encoder–decoder.</p>
+          </article>
+          <article class="concept" data-family="memory">
+            <p class="kicker">The vocabulary</p>
+            <h3>Tokenization</h3>
+            <p>Models do not see letters or dictionary words by default. Byte-pair encoding, from Sennrich, Haddow, and Birch, merges frequent character pairs until a vocabulary of subwords exists. WordPiece is the close cousin used by BERT. SentencePiece, from Kudo and Richardson, learns units from raw text without a separate word splitter, which matters for languages that do not use spaces the way English does.</p>
+            <p class="mech"><span>Mechanism</span> A rare word splits into known pieces, so the model can still say something. A common word stays one token. Token counts, not character counts, are the true length of a context window. Special tokens mark the start, the end, a mask, or the boundary between a user and a tool.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">2021</p>
+            <h3>Vision transformers</h3>
+            <p>Dosovitskiy and colleagues cut an image into patches, embed each patch as if it were a token, add positions, and run a transformer. With enough data, ViT matches convolutional nets. The inductive bias of local filters is no longer mandatory. It is one option among learned attentions. The same block now eats text, image patches, audio frames, and later a mixture.</p>
+            <p class="mech"><span>Mechanism</span> A patch is a pixel block flattened and multiplied by a matrix. After that, the image is a sentence. This is why multimodal models can share a backbone instead of bolting a separate vision algorithm on the side.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">Scale</p>
+            <h3>Scaling laws and Chinchilla</h3>
+            <p>Kaplan and colleagues found smooth power laws: loss falls predictably as you add parameters, data, or compute, if you train in the right regime. Hoffmann and colleagues’ Chinchilla study then showed that many large models were undertrained. For a fixed compute budget, a smaller model on more tokens can beat a larger model on too few. Scale is a method. It is not “make it bigger and stop thinking.”</p>
+            <p class="mech"><span>Mechanism</span> The mutation is budgetary. Architecture stays a transformer. The decision of width versus tokens versus training steps becomes an empirical law rather than a taste. Later overtraining on extra tokens, past the compute-optimal point, is itself a choice: a smaller model that is cheaper to serve.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">Conditional compute</p>
+            <h3>Mixture of experts</h3>
+            <p>A sparsely gated mixture, explored by Shazeer and then by the Switch Transformer, replaces the single feed-forward net with many expert nets. A router sends each token to one or a few experts. Parameter count rises. Compute per token stays closer to a dense model of the active experts only.</p>
+            <p class="mech"><span>Mechanism</span> The router is a small softmax over experts. Load-balancing losses stop every token from picking the same expert. The mutation lets models grow a library of specialized circuits without paying for all of them on every token.</p>
+          </article>
+        </div>
+        <aside class="why">
+          <h3>What this stage hands forward</h3>
+          <p>The transformer is the shared body of everything after it. Generative AI, large language models, RAG, and agents do not invent a new cell. They change the objective, the data, the memory around the model, and the loop that calls it.</p>
+        </aside>
+      </section>
+
+      <section class="era" id="generative" data-search="generative gan vae diffusion ddpm latent diffusion clip sampling temperature top-p instruction tuning rlhf dpo multimodal hallucination">
+        <header class="era-head">
+          <p class="era-index">06 — A parallel branch that merges · 2014–2023</p>
+          <h2>Generative AI</h2>
+          <p class="era-years">The objective mutates from naming the input to producing a new one</p>
+          <p class="era-intro">A classifier answers “what is this?” A generative model answers “what else could exist?” Adversarial nets, variational autoencoders, denoising diffusion, and next-token prediction are different machines for that shift. They begin as separate research towns. By the early 2020s they share backbones, data diets, and a product shape: a model that samples, then a model that samples in the way a person asked.</p>
+        </header>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 230" role="img" aria-labelledby="d6t d6d">
+            <title id="d6t">Three ways to generate</title>
+            <desc id="d6d">A GAN pits a generator against a discriminator. A VAE compresses into a latent and reconstructs. Diffusion learns to reverse a noising process.</desc>
+            <rect class="node-accent" x="30" y="40" width="200" height="150" rx="14"/>
+            <rect class="node" x="260" y="40" width="200" height="150" rx="14"/>
+            <rect class="node-teal" x="490" y="40" width="200" height="150" rx="14"/>
+            <text x="78" y="78">GAN</text>
+            <text class="label-sm" x="48" y="108">generator vs critic</text>
+            <text x="318" y="78">VAE</text>
+            <text class="label-sm" x="286" y="108">compress, then sample</text>
+            <text x="530" y="78">Diffusion</text>
+            <text class="label-sm" x="520" y="108">denoise step by step</text>
+            <text class="label-sm" x="48" y="156">one-shot sample</text>
+            <text class="label-sm" x="286" y="156">latent variable</text>
+            <text class="label-sm" x="520" y="156">iterative refinement</text>
+          </svg>
+          <figcaption>Three generative mutations. Autoregressive transformers, the fourth and now dominant text machine, factor a sample into one token at a time. They are treated with the language models in the next stage.</figcaption>
+        </figure>
+        <div class="callout">
+          <h3>The mutation</h3>
+          <p>The loss no longer stops at a class label. It pressures the model to cover the variety of the data. Then a second mutation, instruction tuning and preference optimization, pressures the same generator to be useful to a particular request rather than merely likely under the raw internet.</p>
+        </div>
+        <div class="concept-grid">
+          <article class="concept" data-family="generation">
+            <p class="kicker">Definition</p>
+            <h3>Discriminative versus generative</h3>
+            <p>A discriminative model learns a boundary: p(label | input), or a direct map to the label. A generative model learns something about how the data themselves are produced. It can draw a new image, continue a paragraph, or fill a masked hole. Many systems are both: a language model is trained generatively and then used to make decisions.</p>
+            <p class="mech"><span>Mechanism</span> Generation needs a sampling procedure, not only a forward pass to a logit. Temperature, truncation, and the number of denoising steps are part of the product. The weights do not fully determine what a user sees.</p>
+          </article>
+          <article class="concept" data-family="generation">
+            <p class="kicker">2014</p>
+            <h3>Generative adversarial networks</h3>
+            <p>Ian Goodfellow and colleagues set two nets against each other. The generator maps noise to a fake sample. The discriminator says whether a sample is real or fake. Training is a minimax game. When it works, the generator matches the data distribution closely enough to fool a strong critic. When it fails, you get mode collapse: the generator repeats a few safe samples, or the two players oscillate.</p>
+            <p class="mech"><span>Mechanism</span> There is no explicit likelihood. The discriminator is a learned loss. That is powerful for sharp images and awkward for stable training. GANs dominated image synthesis until diffusion took the crown.</p>
+          </article>
+          <article class="concept" data-family="generation">
+            <p class="kicker">2013–2014</p>
+            <h3>Variational autoencoders</h3>
+            <p>An encoder maps an input to a distribution over a latent code. A decoder maps a sampled code back to data. Kingma and Welling train this by maximizing a lower bound on the data likelihood: reconstruction quality minus a penalty that keeps the latent near a simple prior, usually a Gaussian. You can then sample a code from the prior and decode a new example.</p>
+            <p class="formula">ELBO = expected reconstruction − KL(encoder ‖ prior)</p>
+            <p class="mech"><span>Mechanism</span> The latent is a compressed cause. VAEs are stable and give you a knob to interpolate. Classic VAEs look blurrier than GANs because the likelihood term, pixel by pixel, prefers averages. They remain the cleanest picture of “encode, wander, decode.”</p>
+          </article>
+          <article class="concept" data-family="generation">
+            <p class="kicker">2020–2022</p>
+            <h3>Diffusion and latent diffusion</h3>
+            <p>Ho, Jain, and Abbeel’s denoising diffusion probabilistic model destroys a sample with many small noise steps, then trains a net to reverse a step. Generation starts from pure noise and denoises. Rombach and colleagues run this in the latent space of an autoencoder, which is the architecture behind Stable Diffusion: cheaper than denoising pixels, still sharp. Conditioning on text, plus classifier-free guidance, steers the trajectory toward a prompt.</p>
+            <p class="mech"><span>Mechanism</span> Each step predicts the noise, or the clean sample, or a velocity. Subtracting a bit of the predicted noise is one move along the reverse path. Guidance amplifies the difference between a conditional and an unconditional prediction so the prompt binds harder. More steps usually mean more refinement and more compute.</p>
+            <details>
+              <summary>Why this is a mutation of earlier energy models</summary>
+              <p>Score-based views connect diffusion to estimating the gradient of the data density, a descendant of energy-based models such as Boltzmann machines. The implementation is new. The instinct — learn the shape of the data, then walk toward it — is old.</p>
+            </details>
+          </article>
+          <article class="concept" data-family="generation">
+            <p class="kicker">Autoregression</p>
+            <h3>Factorizing a sample left to right</h3>
+            <p>Any joint distribution over a sequence can be written as a product of next-step conditionals. An autoregressive model learns those conditionals. Text uses tokens. Images can use pixels or codes in a fixed order. Audio can use waveform tokens. Once the factorization is chosen, training is ordinary next-step cross-entropy, and sampling is “draw, append, repeat.”</p>
+            <p class="formula">p(x) = Π_t p(x_t | x_1 … x_(t−1))</p>
+            <p class="mech"><span>Mechanism</span> This is why a language model is a generative model even though people experience it as a chatbot. The chat is a scaffold of tokens. The training signal is still “which token tends to come next.”</p>
+          </article>
+          <article class="concept" data-family="generation">
+            <p class="kicker">Decoding</p>
+            <h3>Temperature, top-k, top-p, beams</h3>
+            <p>Greedy decoding always takes the most likely next token and can loop or flatten. Temperature divides the logits before softmax: low temperature sharpens, high temperature flattens. Top-k keeps only the k likeliest tokens. Top-p, or nucleus sampling, keeps the smallest set whose probabilities sum past p. Beam search keeps several full hypotheses and is common in translation, less so in open chat, where diversity matters.</p>
+            <p class="mech"><span>Mechanism</span> Sampling is a second model sitting on the first. Two users of the same weights can see different characters if their decoders differ. Evaluation has to say which decoder was used.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">2021</p>
+            <h3>CLIP and multimodal binding</h3>
+            <p>Radford and colleagues train an image encoder and a text encoder so that matching pairs score high and mismatched pairs score low. The result is a shared space. A caption can retrieve an image. An image can be classified with the names of classes written in language, without task-specific heads. Later generators use this kind of binding so a sentence can steer pixels.</p>
+            <p class="mech"><span>Mechanism</span> Contrastive loss pushes paired embeddings together and others apart, often with a temperature on the similarity logits. No pixel is generated inside CLIP itself. CLIP is a lock between two modalities. Diffusion and language models are the machines that walk through that lock.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">2022</p>
+            <h3>Instruction tuning and RLHF</h3>
+            <p>A raw language model continues text. A person wants an answer. Supervised fine-tuning on instruction–response pairs teaches the format. Reinforcement learning from human preferences, building on Christiano’s 2017 preference work and carried into language models by InstructGPT, then trains a reward model on ranked outputs and optimizes the policy, usually with PPO, to score higher without drifting too far from the original model.</p>
+            <p class="mech"><span>Mechanism</span> Three models appear: the policy that speaks, the reward model that judges, and a reference copy that anchors a KL penalty. Human raters supply comparisons, not only absolute scores. The mutation is the objective: from “likely on the internet” to “preferred by raters given this instruction.”</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">2022–2023</p>
+            <h3>Constitutional AI and direct preference optimization</h3>
+            <p>Constitutional AI uses written principles and model-written critiques to generate preference data, a form of reinforcement learning from AI feedback. Direct preference optimization, from Rafailov and colleagues, skips the explicit reward model. The preference pairs themselves define a classification loss on the policy, with a closed-form link to the same optimal policy RLHF was chasing.</p>
+            <p class="mech"><span>Mechanism</span> DPO’s practical mutation is simplicity: no sampling loop against a reward model during the main update. The data still encode a preference. Garbage comparisons still produce a garbage policy. The algorithm does not invent human values. It fits the comparisons you hand it.</p>
+          </article>
+          <article class="concept wide" data-family="generation">
+            <p class="kicker">A structural limit</p>
+            <h3>Fluency is not grounding</h3>
+            <p>A generative model samples from patterns in its training mixture and from the prompt. It can produce a citation-shaped string, a plausible number, or a confident biography of a person who was never there. People call the untrue-but-fluent case a hallucination. It is not a rare bug beside an otherwise factual database. The model was not a database. Grounding has to be added: retrieval, tools, constraints, or a human check.</p>
+            <p class="mech"><span>Mechanism</span> Likelihood rewards plausible continuation. Plausible and true overlap, especially on repeated facts, and they diverge on rare, private, recent, or adversarial questions. RAG is the architectural answer to that divergence. It does not make the divergence impossible.</p>
+          </article>
+        </div>
+        <aside class="why">
+          <h3>What this stage hands forward</h3>
+          <p>The field now expects models to produce, not only to label, and to take instruction. The next stage scales the autoregressive branch until the interface is a language model. Retrieval arrives because production outran the model’s memory of facts.</p>
+        </aside>
+      </section>
+
+      <section class="era" id="llm" data-search="large language model gpt-3 in-context learning few-shot chain of thought prompt context window kv cache lora qlora quantization distillation evaluation emergent abilities reasoning test-time compute">
+        <header class="era-head">
+          <p class="era-index">07 — The interface · 2018–2026</p>
+          <h2>Large language models</h2>
+          <p class="era-years">A causal transformer, grown up, becomes the way people meet the rest of the stack</p>
+          <p class="era-intro">GPT shows that next-token pretraining on a decoder is enough to transfer. GPT-3 shows that scale plus examples in the prompt can stand in for many fine-tunes. After instruction tuning, the same object is a chat model. The concepts that matter from here are not a new cell. They are context, adaptation without full retraining, evaluation that does not fool you, and spending extra compute at answer time.</p>
+        </header>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 220" role="img" aria-labelledby="d7t d7d">
+            <title id="d7t">How a language model is brought up</title>
+            <desc id="d7d">Pretraining on next-token loss, then supervised instruction tuning, then preference optimization, then optional retrieval or tools at inference.</desc>
+            <rect class="node" x="24" y="70" width="140" height="70" rx="12"/>
+            <rect class="node-accent" x="200" y="70" width="140" height="70" rx="12"/>
+            <rect class="node-teal" x="376" y="70" width="140" height="70" rx="12"/>
+            <rect class="node" x="552" y="70" width="140" height="70" rx="12"/>
+            <text class="label-sm" x="48" y="100">Pretrain</text>
+            <text class="label-sm" x="228" y="100">Instruct</text>
+            <text class="label-sm" x="396" y="100">Preferences</text>
+            <text class="label-sm" x="576" y="100">Context</text>
+            <text class="label-sm" x="48" y="122">next token</text>
+            <text class="label-sm" x="224" y="122">show answers</text>
+            <text class="label-sm" x="400" y="122">rank outputs</text>
+            <text class="label-sm" x="572" y="122">prompt + tools</text>
+            <path class="pulse" d="M164 105h36M340 105h36M516 105h36"/>
+          </svg>
+          <figcaption>Weights learn language in bulk. Alignment teaches which continuations people wanted. The prompt, and anything retrieval or tools paste into it, is the part that can change without a training run.</figcaption>
+        </figure>
+        <div class="callout">
+          <h3>The mutation</h3>
+          <p>Task adaptation splits in two. You can change weights, or you can change context. In-context learning is the second path: demonstrations, instructions, and retrieved passages sit in the window and steer a frozen model. Agents later treat that window as a working desk.</p>
+        </div>
+        <div class="concept-grid">
+          <article class="concept" data-family="learning">
+            <p class="kicker">Pretraining</p>
+            <h3>Causal language modeling</h3>
+            <p>The model reads a long stream of tokens and predicts the next one, shifting one step at a time. Every position yields a training signal, which is why the objective is sample-efficient compared with a single label on a whole document. GPT-1 demonstrated the transfer. GPT-2 pushed the scale and the worry. GPT-3, in Brown and colleagues’ 2020 paper, made few-shot prompting the headline result.</p>
+            <p class="mech"><span>Mechanism</span> Loss is cross-entropy on the true next token. Tokens the model already predicts confidently teach it less. Rare constructions and long-range agreements teach it more. The dataset mixture — code, books, dialogue, languages — is a hidden hyperparameter of what “a general model” means.</p>
+          </article>
+          <article class="concept" data-family="memory">
+            <p class="kicker">The prompt</p>
+            <h3>In-context learning</h3>
+            <p>Give a few input–output pairs, then a new input, and the model continues the pattern. No gradient step is required. Zero-shot relies on the instruction alone. One-shot and few-shot add examples. The examples occupy context, so they compete with the document you also wanted the model to read.</p>
+            <p class="mech"><span>Mechanism</span> Whether this is “learning” in the weight-update sense is a live argument. Functionally, the forward pass implements a temporary adaptation. The weights are a prior. The prompt is a local program. Bad examples in the prompt are executed as faithfully as good ones.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">A careful word</p>
+            <h3>Emergent abilities, and the mirage warning</h3>
+            <p>Some benchmarks look flat as models grow and then jump. Wei and colleagues called these emergent abilities. Schaeffer, Miranda, and Koyejo showed that a sharp metric, such as exact-match accuracy, can invent a jump even when the underlying per-token loss improves smoothly. Both claims belong in the atlas. Some skills do show up only at scale in practice. A discontinuous score is not, by itself, proof of a phase change.</p>
+            <p class="mech"><span>Mechanism</span> When you read a chart of model size versus a benchmark, ask whether the metric is a hard threshold. If it is, try a softer metric before announcing a miracle. Evaluation design is part of the science.</p>
+          </article>
+          <article class="concept" data-family="memory">
+            <p class="kicker">Working memory</p>
+            <h3>Context windows and the KV cache</h3>
+            <p>The context window is the maximum number of tokens the model can attend over. It grew from hundreds, to a few thousand, to hundreds of thousands in later systems, using RoPE scaling, better training curricula, and engineering on the cache. During generation the keys and values of past tokens are stored so the model does not recompute them. That cache is the model’s short-term memory, and it is the memory agents fill with plans, tool results, and scratch notes.</p>
+            <p class="mech"><span>Mechanism</span> Cache memory grows with layers, heads, batch, and length. Long context is a product feature and a systems constraint. “Lost in the middle,” measured by Liu and colleagues, warns that models may use the start and end of a long prompt more reliably than the center. Putting the crucial passage at the edge is a practical consequence.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">Reasoning on the page</p>
+            <h3>Chain of thought</h3>
+            <p>Wei and colleagues showed that asking a model to write intermediate steps, or showing such steps in the few-shot examples, improves many arithmetic and logical tasks. The scratchpad uses the same next-token machinery. It spends extra tokens so later tokens can condition on a written derivation. It is not a proof that the derivation is valid. It is a change in the computation graph at inference.</p>
+            <p class="mech"><span>Mechanism</span> Tokens are time. More intermediate tokens mean more sequential computation before the answer token. Self-consistency samples several chains and votes. The failure mode is a fluent chain that reaches a wrong answer and lends the error a costume of rigor.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">Adaptation</p>
+            <h3>LoRA, QLoRA, and adapters</h3>
+            <p>Full fine-tuning copies a giant weight matrix to edit it. Low-rank adaptation, from Hu and colleagues, freezes the original weights and learns a thin update: a product of two small matrices added to the frozen one. QLoRA, from Dettmers and colleagues, quantizes the frozen base, often to 4-bit, and trains the low-rank update in higher precision. Adapters insert small bottleneck layers instead. The mutation is economic: specialization without a second full model.</p>
+            <p class="formula">W′ = W + (α / r) B A
+A and B are the low-rank factors. r is the rank, much smaller than the width.</p>
+            <p class="mech"><span>Mechanism</span> Many task changes live in a low-dimensional subspace of the weight update. LoRA bets on that. If the new task needs entirely new knowledge the base never saw, a low-rank patch is the wrong tool. Retrieval or continued pretraining carries facts better than a tiny adapter.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">Serving</p>
+            <h3>Quantization and distillation</h3>
+            <p>Quantization stores weights, and sometimes activations, in fewer bits. Int8 and int4 are common targets. The art is choosing a scale so the rounding does not wreck the residual stream. Distillation trains a smaller student to match a larger teacher’s outputs, or its token distributions. Both mutations exist so a model trained at research scale can run at product scale.</p>
+            <p class="mech"><span>Mechanism</span> A 16-bit number has more distinct values than a 4-bit number. Grouped scales recover some of the range. Distillation recovers some of the behavior with fewer layers. Neither adds knowledge the teacher did not have.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">Measurement</p>
+            <h3>Perplexity, benchmarks, contamination</h3>
+            <p>Perplexity summarizes how surprised the model is by held-out text. Lower is better, and it is not a user satisfaction score. Broad suites such as MMLU probe many subjects. HumanEval probes code. A leaderboard can be gamed by training on the test, accidentally or not. Contamination — overlap between training text and the exam — inflates scores. A serious report says what the model saw, how decoding was set, and what the metric cannot see.</p>
+            <p class="mech"><span>Mechanism</span> A benchmark is a sample of a skill, not the skill. Agents make this worse: success on a ten-step task can fail in ways no multiple-choice item measures, including side effects the score never looks at.</p>
+          </article>
+          <article class="concept" data-family="generation">
+            <p class="kicker">2024 onward</p>
+            <h3>Test-time compute</h3>
+            <p>Reasoning-focused models, of which OpenAI’s o1 announcement in 2024 is the public landmark, spend more inference computation before answering. The visible symptom is a longer hidden or summarized deliberation and better results on hard problems. The mutation is where the compute goes. Training-time scale is no longer the only dial. Search at answer time, the AlphaGo lesson, comes back inside the language interface.</p>
+            <p class="mech"><span>Mechanism</span> The user pays in latency and money for extra generated steps, extra samples, or an internal search. A harder question can justify a larger budget. A trivial question should not. Routing — sending easy work to a cheap model and hard work to a slow reasoner — is the systems version of that judgment.</p>
+          </article>
+          <article class="concept wide" data-family="memory">
+            <p class="kicker">The split that forces the next stage</p>
+            <h3>Parametric memory</h3>
+            <p>Facts in the weights are parametric memory. They are compressed, interpolated, and frozen at the end of training. Updating one fact can require new data and a new run, and can disturb other facts. The model also cannot show the page it “remembered.” For a private corpus, a changing law, or a citation you can open, parametric memory is the wrong organ. Non-parametric memory — an index outside the weights — is the organ RAG adds.</p>
+            <p class="mech"><span>Mechanism</span> You can sometimes edit weights, and you can sometimes prompt a fact into context. Editing does not scale to a library. Prompting does not scale past the window, and it still needs a way to choose which page enters the window. That choice is retrieval.</p>
+          </article>
+        </div>
+        <aside class="why">
+          <h3>What this stage hands forward</h3>
+          <p>A steerable generator with a finite working memory and a vast, blurry long-term memory in its weights. The next mutation does not retrain the generator. It decides what to put on the desk in front of it.</p>
+        </aside>
+      </section>
+
+      <section class="era" id="rag" data-search="retrieval augmented generation rag lewis embedding vector database bm25 hybrid search chunking reranker hyde graphrag citation faithfulness lost in the middle hnsw dense passage">
+        <header class="era-head">
+          <p class="era-index">08 — External memory · 2020–2026</p>
+          <h2>Retrieval-augmented generation</h2>
+          <p class="era-years">The model reads a source it can update, cite, and permission</p>
+          <p class="era-intro">Lewis and colleagues’ 2020 RAG paper couples a retriever with a generator and trains the pair on knowledge-intensive questions. The idea is older than the brand name — search plus a reader — and younger systems stretch it into chunking pipelines, hybrid indexes, rerankers, graphs, and agents that retrieve more than once. The mutation is where knowledge lives.</p>
+        </header>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 230" role="img" aria-labelledby="d8t d8d">
+            <title id="d8t">A RAG pipeline</title>
+            <desc id="d8d">Documents are chunked and embedded into an index. A query retrieves candidates, a reranker sorts them, and the generator answers from the selected context.</desc>
+            <rect class="node" x="20" y="80" width="100" height="56" rx="10"/>
+            <text class="label-sm" x="36" y="112">documents</text>
+            <path class="wire" d="M120 108h28"/>
+            <rect class="node" x="150" y="80" width="90" height="56" rx="10"/>
+            <text class="label-sm" x="168" y="112">chunks</text>
+            <path class="wire" d="M240 108h28"/>
+            <rect class="node-accent" x="270" y="80" width="90" height="56" rx="10"/>
+            <text class="label-sm" x="292" y="112">index</text>
+            <path class="pulse" d="M360 108h28"/>
+            <rect class="node" x="390" y="80" width="100" height="56" rx="10"/>
+            <text class="label-sm" x="408" y="112">rerank</text>
+            <path class="wire" d="M490 108h28"/>
+            <rect class="node-teal" x="520" y="80" width="170" height="56" rx="10"/>
+            <text class="label-sm" x="545" y="112">grounded answer</text>
+          </svg>
+          <figcaption>Ingest happens ahead of the question. At question time the model should see a few relevant passages, not the whole library and not an empty prompt.</figcaption>
+        </figure>
+        <div class="callout">
+          <h3>The mutation</h3>
+          <p>Memory splits. Linguistic skill and a great deal of world knowledge stay in the weights. The facts you need to audit, refresh, or keep private move into a store. Attention already knew how to read a supplied context. RAG is the discipline of choosing that context.</p>
+        </div>
+        <div class="concept-grid">
+          <article class="concept" data-family="memory">
+            <p class="kicker">2020</p>
+            <h3>The RAG pattern</h3>
+            <p>A retriever, often a dense bi-encoder, returns passages for a question. A generator, in the original paper a sequence-to-sequence model, conditions on those passages. Lewis and colleagues marginalize over the retrieved documents so the answer probability accounts for several sources. Neighbors in the same season include DPR, which trains the dense retriever for open-domain QA, REALM, which retrieves during pretraining, and later RETRO, which retrieves at the scale of trillions of tokens inside the language model itself.</p>
+            <p class="mech"><span>Mechanism</span> Non-parametric memory can be edited by editing the index. You do not touch every weight to fix one outdated paragraph. The generator can still ignore the passage, misread it, or blend it with a parametric habit. Conditioning is not obedience.</p>
+          </article>
+          <article class="concept" data-family="memory">
+            <p class="kicker">Ingest</p>
+            <h3>Chunking</h3>
+            <p>Models and embedding spaces have length limits, and a whole handbook is a poor unit of retrieval. Chunking splits documents into passages. Size, overlap, and boundaries matter. Fixed windows are simple. Structure-aware splits follow headings, paragraphs, or function boundaries in code. Semantic splits start a new chunk when the topic drifts. Too small, and the answer’s premise is in the previous chunk. Too large, and the embedding averages several topics into mush.</p>
+            <p class="mech"><span>Mechanism</span> Overlap is the cheap guard against a sentence cut in half. Metadata — title, date, source, permissions — should travel with the chunk. A beautiful embedding cannot recover a chunk that never included the sentence you needed.</p>
+          </article>
+          <article class="concept" data-family="memory">
+            <p class="kicker">Representation</p>
+            <h3>Embedding models</h3>
+            <p>A bi-encoder maps a query and a passage, separately, into the same vector space. Nearness is usually cosine similarity or dot product. The embedding model is itself a trained neural net, often a transformer, with a contrastive objective so questions land near passages that answer them. It is not the generator. A strong chat model can be a weak embedder, and the reverse is also true.</p>
+            <p class="mech"><span>Mechanism</span> Separate encoding is what makes the index fast: passage vectors are computed once. The price is no early interaction between query words and passage words. That interaction is deferred to a reranker, which can afford to look at a shortlist only.</p>
+          </article>
+          <article class="concept" data-family="memory">
+            <p class="kicker">Index</p>
+            <h3>Vector search and HNSW</h3>
+            <p>Exact nearest neighbor scans every vector. Approximate indexes trade a little recall for a lot of speed. Hierarchical Navigable Small World graphs, from Malkov and Yashunin, link vectors to nearby vectors on several layers. Search starts coarse and descends. A vector database stores the vectors, the text, and filters such as tenant or date.</p>
+            <p class="mech"><span>Mechanism</span> Approximate search can miss the true neighbor. Measure recall of the index, not only the charm of the final answer. Filters should run with the search so a user never receives another tenant’s chunk just because it was geometrically close.</p>
+          </article>
+          <article class="concept" data-family="memory">
+            <p class="kicker">Lexical</p>
+            <h3>BM25 and hybrid retrieval</h3>
+            <p>BM25, the mature form of classical probabilistic retrieval from Robertson and Zaragoza, scores a passage by term frequency, inverse document frequency, and length normalization. It excels when the query has a rare exact string: an error code, a statute number, a function name. Dense retrieval excels when the wording differs and the meaning matches. Hybrid search runs both and fuses the lists, often with reciprocal rank fusion.</p>
+            <p class="formula">A rare term that appears in a short passage ranks high.
+A term that appears in every passage ranks low.</p>
+            <p class="mech"><span>Mechanism</span> Dense-only search is a common production bug. “Section 12.4(b)” can be semantically near many legal paragraphs and identical to only one. Keep a lexical channel when identifiers matter.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">Query side</p>
+            <h3>Rewrites, multi-query, and HyDE</h3>
+            <p>Users ask short, messy questions. A rewrite step expands acronyms, splits a compound question, or produces several search queries. HyDE, from Gao, Ma, Lin, and Callan, asks the language model to draft a hypothetical passage and embeds that draft as the query. The draft can be wrong in its facts and still land nearer the real documents than the raw question did, because it matches passage style.</p>
+            <p class="mech"><span>Mechanism</span> The query is part of the model. Changing the query changes the neighborhood you search. HyDE spends a generation to improve a retrieval. That is already a small agent step hiding inside a pipeline people still call “just RAG.”</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">Precision</p>
+            <h3>Cross-encoder reranking</h3>
+            <p>Nogueira and Cho showed that a BERT cross-encoder, which reads the query and the passage together, reranks a shortlist better than the bi-encoder that fetched it. The cross-encoder is too slow to run on millions of chunks and fast enough to run on the top fifty. The cascade is the mutation: cheap recall, then expensive precision.</p>
+            <p class="mech"><span>Mechanism</span> Joint attention sees “not” and “except,” which a single vector often smears. Rerank scores are also a useful threshold: if the best passage is still a weak match, the honest generator says it does not have support.</p>
+          </article>
+          <article class="concept" data-family="generation">
+            <p class="kicker">The answer</p>
+            <h3>Grounding, citations, and refusal</h3>
+            <p>The prompt should contain the passages, their identifiers, and an instruction to use them and to say when they are insufficient. Citations point at those identifiers so a person can open the source. A citation is not proof. Models can attach the right bracket to the wrong claim. Faithfulness means the answer’s claims follow from the retrieved text, not from the model’s urge to complete the pattern.</p>
+            <p class="mech"><span>Mechanism</span> Put the highest-ranked passage where the model actually attends, remembering the lost-in-the-middle effect. Require the answer to quote or to point. If the index returns nothing relevant, refusal is a success, not a failure of politeness.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">Richer stores</p>
+            <h3>GraphRAG and structured memory</h3>
+            <p>A vector of a paragraph is weak at questions that need a map: who is connected to whom, what changed across a corpus, what themes recur. GraphRAG, described by Edge and colleagues, extracts entities and relations, summarizes communities of the graph, and retrieves those summaries. Tables, knowledge graphs, and metadata filters are the same instinct. The store should match the question, not only the embedding fashion of the year.</p>
+            <p class="mech"><span>Mechanism</span> Extraction into a graph is itself a model call, with its own errors. A wrong edge becomes a confident path. Keep provenance from each edge back to text. Structure is a lens. It is not automatically truer than the paragraph.</p>
+          </article>
+          <article class="concept wide" data-family="learning">
+            <p class="kicker">Did it work</p>
+            <h3>Failure modes and evaluation</h3>
+            <p>RAG fails in layers. Bad parses. Chunks that split the answer. An embedder that was trained on different jargon. A stale index. A retriever that returns a near-miss. A reranker that trusts a keyword collision. A generator that saw the right passage and answered from habit anyway. Useful evaluation separates these. Context precision asks whether the fetched text is relevant. Context recall asks whether the needed text was fetched. Faithfulness asks whether the answer stuck to it. Answer relevance asks whether the answer addressed the question. Frameworks such as RAGAS package versions of these judgments, often with a model as a judge, which needs a human audit of its own.</p>
+            <p class="mech"><span>Mechanism</span> Look at retrieved text before you look at prose quality. A beautiful answer on the wrong passage is a retrieval bug. A bad answer on the right passage is a reading bug. One score for the whole system hides which organ to fix.</p>
+            <details>
+              <summary>What RAG does not become</summary>
+              <p>RAG does not give the model a will, a plan, or the right to act. It answers better when the knowledge is on the page. The moment the system must decide to search again, call a calculator, write a file, or ask a person, the architecture has mutated into an agent that uses RAG as one tool.</p>
+            </details>
+          </article>
+        </div>
+        <aside class="why">
+          <h3>What this stage hands forward</h3>
+          <p>A generator with a library. The open problem is control across time: which query, which tool, when to stop, and what to do with the observation. That control loop is the last mutation in this cycle.</p>
+        </aside>
+      </section>
+
+      <section class="era" id="agent" data-search="agentic ai react tool use function calling planning tree of thoughts reflexion memory multi-agent mcp computer use human in the loop evaluation guardrails voyager generative agents">
+        <header class="era-head">
+          <p class="era-index">09 — The loop closes · 2022–2026</p>
+          <h2>Agentic AI</h2>
+          <p class="era-years">From one completion to a policy that perceives, acts, and looks again</p>
+          <p class="era-intro">An agent, in the sense used here, is a model wrapped in a loop. It is given a goal, not only a question. It may retrieve, call a tool, read the result, revise a plan, and continue. ReAct made the pattern legible. Tool-calling APIs made it ordinary. Protocols, computer use, and teams of role-specialized models are later mutations of the same loop. The neuron has not been replaced. It is buried inside every forward pass the loop decides to spend.</p>
+        </header>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 250" role="img" aria-labelledby="d9t d9d">
+            <title id="d9t">The agent loop</title>
+            <desc id="d9d">A cycle of perceive, retrieve, plan, act, and observe, with a person able to stop the loop. Reflect feeds the next plan.</desc>
+            <rect class="node-accent" x="40" y="30" width="120" height="48" rx="12"/>
+            <rect class="node" x="290" y="30" width="120" height="48" rx="12"/>
+            <rect class="node-teal" x="540" y="30" width="140" height="48" rx="12"/>
+            <rect class="node" x="540" y="160" width="140" height="48" rx="12"/>
+            <rect class="node-accent" x="290" y="160" width="120" height="48" rx="12"/>
+            <rect class="node" x="40" y="160" width="120" height="48" rx="12"/>
+            <text class="label-sm" x="68" y="58">Perceive</text>
+            <text class="label-sm" x="324" y="58">Retrieve</text>
+            <text class="label-sm" x="586" y="58">Plan</text>
+            <text class="label-sm" x="586" y="188">Act</text>
+            <text class="label-sm" x="316" y="188">Observe</text>
+            <text class="label-sm" x="68" y="188">Reflect</text>
+            <path class="pulse" d="M160 54h130M410 54h130M610 78v82M540 184H410M290 184H160M100 160V78"/>
+          </svg>
+          <figcaption>Each box can be a model call, a search, a person, or a piece of ordinary code. The cycle is the mutation. Stopping rules and permissions are part of the architecture, not an afterthought.</figcaption>
+        </figure>
+        <div class="callout">
+          <h3>The mutation</h3>
+          <p>The interface changes from a function, prompt in and paragraph out, into a controller. Language is now both the reasoning trace and the action language. Tools turn tokens into state changes. The loop inherits the transformer, the generator, the preference tuning, and the retriever, and adds time, side effects, and a budget.</p>
+        </div>
+        <div class="concept-grid">
+          <article class="concept" data-family="action">
+            <p class="kicker">Definition</p>
+            <h3>What “agentic” adds</h3>
+            <p>A chatbot answers. An agent pursues. The difference is not a bigger model. It is an outer loop with a goal, actions that touch state, observations that return, and a stop condition. A single retrieval before a single answer is a pipeline. A system that notices the passage was irrelevant and searches again has crossed into agency, even if the policy is still a language model.</p>
+            <p class="mech"><span>Mechanism</span> Draw the boundary at the loop, not at the marketing. If the model cannot change what happens next on the basis of an observation, it is a generator with accessories. If it can, you have to design for runaway loops, spent budgets, and actions you cannot undo.</p>
+          </article>
+          <article class="concept" data-family="action">
+            <p class="kicker">2022–2023</p>
+            <h3>ReAct: reason and act</h3>
+            <p>Yao and colleagues interleave a thought with an action and an observation. The thought is ordinary chain-of-thought text. The action is a named tool, such as search, with arguments. The observation is pasted back into the trace. The model then thinks again. The paper’s result is practical: answering and acting in one trace beats either alone on knowledge tasks and interactive environments.</p>
+            <p class="formula">Thought → Action → Observation → Thought → …
+until the action is Finish, or a budget ends</p>
+            <p class="mech"><span>Mechanism</span> The trace is context. It is also a log you can audit. That double use is why text, a seemingly soft medium, became the control plane. A hidden scratchpad that nobody stores is a worse production design than a visible one.</p>
+          </article>
+          <article class="concept" data-family="action">
+            <p class="kicker">Tools</p>
+            <h3>Function calling</h3>
+            <p>Toolformer, from Schick and colleagues, showed a language model can be trained to insert API calls into text and continue from the results. Product APIs then offered a stricter version: the model emits a JSON object matching a schema, your code runs the function, and you return a string. The schema is a contract. Types, required fields, and enums are how you keep an action inside the set you are willing to allow.</p>
+            <p class="mech"><span>Mechanism</span> The model proposes. The runtime disposes. Never confuse those roles. A well-specified tool with a dry-run mode, idempotency where it matters, and an error string the model can read is the difference between a demo and a system. The error string is an observation. Write it for the next decision, not only for a human debugger.</p>
+          </article>
+          <article class="concept" data-family="action">
+            <p class="kicker">Planning</p>
+            <h3>Chains, trees, and reflection</h3>
+            <p>Chain-of-thought is one path. Tree of Thoughts, also from Yao and colleagues, branches several partial plans, scores them, and searches. Plan-and-execute splits a planner from a worker so the plan is not rewritten from scratch every step. Reflexion, from Shinn and colleagues, stores a verbal note about what failed and shows it on the next attempt. These are search algorithms whose node expansion happens to be a language model.</p>
+            <p class="mech"><span>Mechanism</span> Branching spends calls to avoid a bad first path. Reflection spends a call to write a lesson. Both assume you can tell a better state from a worse one. If the evaluator is the same model that failed, the lesson can be confidently wrong. An external checker — tests, a compiler, a retrieved statute — is a stronger reward than another paragraph of self-critique.</p>
+          </article>
+          <article class="concept" data-family="memory">
+            <p class="kicker">Time</p>
+            <h3>Memory beyond the window</h3>
+            <p>The context window is working memory. Past it, agents keep stores. A scratchpad holds the current plan. An episodic log holds what was tried. A vector or graph store holds durable notes and, via RAG, the organization’s documents. Summaries compress a long episode so the next episode can start without replaying every token. Memory policy is a product decision: what is written, what expires, and what the person can inspect or delete.</p>
+            <p class="mech"><span>Mechanism</span> Write memories on purpose. A default of “embed every utterance forever” fills the index with small talk and makes retrieval worse. Episodic memory should cite the turn it came from. Semantic memory should cite the document. An agent that cannot show where a memory came from should not be allowed to treat that memory as fact.</p>
+          </article>
+          <article class="concept" data-family="action">
+            <p class="kicker">Organization</p>
+            <h3>Multi-agent roles</h3>
+            <p>Generative Agents, from Park and colleagues, gave simulated characters memory, reflection, and planning, and a town emerged from local decisions. Voyager, from Wang and colleagues, let a model play Minecraft by writing code skills and storing the ones that worked. Other systems assign roles — researcher, critic, coder — and pass messages. The mutation is division of context. Each role sees a narrower prompt, which can help, and can also drift from the original goal.</p>
+            <p class="mech"><span>Mechanism</span> A team needs a contract: who may call tools, who may speak to the user, and how a disagreement ends. More agents multiply cost and failure modes. Use a second role when a second context genuinely helps, such as a tester who does not see the author’s private reasoning, not because a crowd of personas looks advanced.</p>
+          </article>
+          <article class="concept" data-family="architecture">
+            <p class="kicker">2024</p>
+            <h3>Protocols and computer use</h3>
+            <p>The Model Context Protocol, introduced by Anthropic in 2024, is an open way to expose tools and data sources to a model host. The mutation is standardization: one client can talk to many servers instead of every product inventing a private plugin format. Computer-use and browser-use systems go further. The action space becomes the graphical interface people already use: clicks, typing, screenshots as observations. The model is then a visitor in a human environment, which is powerful and brittle.</p>
+            <p class="mech"><span>Mechanism</span> A protocol separates the model from the tool’s implementation. A screenshot observation is high-dimensional and ambiguous compared with a JSON result. Prefer a structured tool when one exists. Leave GUI control for the systems that have no API, and sandbox it.</p>
+          </article>
+          <article class="concept" data-family="action">
+            <p class="kicker">Safety of action</p>
+            <h3>Permissions, sandboxes, and the human stop</h3>
+            <p>A wrong paragraph can mislead. A wrong tool call can delete, pay, send, or publish. Agentic systems need an allowlist of tools, argument checks, least privilege, rate limits, and a distinction between draft and commit. Human-in-the-loop means a person approves the actions that are expensive or irreversible. It does not mean a person watches every token. The stop button, the budget, and the audit log are features of the loop.</p>
+            <p class="mech"><span>Mechanism</span> Separate propose from apply. Let the model draft the email and require a click to send it. Run code in a sandbox with no network unless the task needs it. Record the tool name, the arguments, and the observation. If you cannot reconstruct why an action happened, you do not have an agent. You have a side effect with a story attached.</p>
+          </article>
+          <article class="concept" data-family="learning">
+            <p class="kicker">Measurement</p>
+            <h3>Evaluating a loop</h3>
+            <p>Single-turn benchmarks under-measure agents. Task success on a scripted environment matters, and so do cost, latency, number of steps, recovery from tool errors, and whether forbidden actions were attempted. Side effects outside the score — a file changed, a message sent — need their own checks. Simulated users help. They also share blind spots with the agent if they are the same kind of model.</p>
+            <p class="mech"><span>Mechanism</span> Fix the environment before you praise the policy. A flaky tool makes a careful agent look stupid. Report the tool reliability next to the success rate. Compare against a strong single-call baseline. If one well-retrieved answer beats the loop, the loop is ceremony.</p>
+          </article>
+          <article class="concept wide" data-family="action">
+            <p class="kicker">The cycle, closed</p>
+            <h3>What flows back to the neuron</h3>
+            <p>Agents do not end the history. They feed it. Traces of plans and tool use become training data for the next policy. Preferences about which trajectory a person accepted become the next alignment set. Documents the agent wrote, after a person keeps them, re-enter the retrieval index. Failures become evals. The weights that get trained are still matrices inside residual blocks, inside attention and feed-forward layers, which are still weighted sums and nonlinearities — the formal neuron, mutated until it could sit inside a loop that acts.</p>
+            <p class="mech"><span>Mechanism</span> Four interfaces now stack. Weights hold slow skill. Activations and the KV cache hold the present forward pass. Context and retrieved text hold the case in front of the model. Tools hold the world’s state. A change at any layer is a real mutation. None of them repeals the layer below.</p>
+            <details>
+              <summary>Open problems, stated plainly</summary>
+              <p>Agents still lose the plot on long tasks, call tools they do not need, trust a bad retrieval, and are expensive to evaluate honestly. Grounding is partial. Preferences are not the same thing as truth or justice. Energy, data rights, and labor are part of the system even though they do not appear in the block diagram. The honest next mutation is whatever makes the loop more checkable, not only more autonomous.</p>
+            </details>
+          </article>
+        </div>
+        <aside class="why">
+          <h3>Where to stand when you build</h3>
+          <p>Start from the task’s side effects, not from the most autonomous diagram. If the job is a grounded answer, build RAG and stop. If the job is a repeated action with a clear checker, add a loop and a budget. Keep a person on the irreversible step. And when you debug, walk downward: tool, retrieval, prompt, decoding, and only then the weights. The stack is deep. The failure is usually in a specific layer.</p>
+        </aside>
+      </section>
+
+
+      <section class="refs" id="references" aria-labelledby="ref-title">
+        <div class="section-head">
+          <p class="era-index">Primary sources</p>
+          <h2 id="ref-title">References</h2>
+          <p>These are the papers and books behind the atlas. Publisher pages and arXiv copies are linked where a stable address exists. The explanatory text on this page is the author’s; the cited works keep their own terms.</p>
+        </div>
+        <ol>
+          <li><span class="ref-era">Neuron</span>Hodgkin, A. L., &amp; Huxley, A. F. (1952). A quantitative description of membrane current and its application to conduction and excitation in nerve. <em>The Journal of Physiology</em>. <a href="https://doi.org/10.1113/jphysiol.1952.sp004764" target="_blank" rel="noopener noreferrer">doi:10.1113/jphysiol.1952.sp004764</a></li>
+          <li><span class="ref-era">Neuron</span>Hebb, D. O. (1949). <em>The Organization of Behavior</em>. Wiley.</li>
+          <li><span class="ref-era">Formal neuron</span>McCulloch, W. S., &amp; Pitts, W. (1943). A logical calculus of the ideas immanent in nervous activity. <em>Bulletin of Mathematical Biophysics</em>. <a href="https://doi.org/10.1007/BF02478259" target="_blank" rel="noopener noreferrer">doi:10.1007/BF02478259</a></li>
+          <li><span class="ref-era">Formal neuron</span>Turing, A. M. (1950). Computing machinery and intelligence. <em>Mind</em>. <a href="https://doi.org/10.1093/mind/LIX.236.433" target="_blank" rel="noopener noreferrer">doi:10.1093/mind/LIX.236.433</a></li>
+          <li><span class="ref-era">Formal neuron</span>McCarthy, J., Minsky, M. L., Rochester, N., &amp; Shannon, C. E. (1955). A proposal for the Dartmouth summer research project on artificial intelligence.</li>
+          <li><span class="ref-era">Formal neuron</span>Rosenblatt, F. (1958). The perceptron: A probabilistic model for information storage and organization in the brain. <em>Psychological Review</em>. <a href="https://doi.org/10.1037/h0042519" target="_blank" rel="noopener noreferrer">doi:10.1037/h0042519</a></li>
+          <li><span class="ref-era">Formal neuron</span>Widrow, B., &amp; Hoff, M. E. (1960). Adaptive switching circuits. <em>IRE WESCON Convention Record</em>.</li>
+          <li><span class="ref-era">Formal neuron</span>Minsky, M., &amp; Papert, S. (1969). <em>Perceptrons</em>. MIT Press.</li>
+          <li><span class="ref-era">Connectionism</span>Linnainmaa, S. (1976). Taylor expansion of the accumulated rounding error. <em>BIT</em>. <a href="https://doi.org/10.1007/BF01931367" target="_blank" rel="noopener noreferrer">doi:10.1007/BF01931367</a></li>
+          <li><span class="ref-era">Connectionism</span>Werbos, P. J. (1990). Backpropagation through time: What it does and how to do it. <em>Proceedings of the IEEE</em>. <a href="https://doi.org/10.1109/5.58337" target="_blank" rel="noopener noreferrer">doi:10.1109/5.58337</a></li>
+          <li><span class="ref-era">Connectionism</span>Hopfield, J. J. (1982). Neural networks and physical systems with emergent collective computational abilities. <em>PNAS</em>. <a href="https://doi.org/10.1073/pnas.79.8.2554" target="_blank" rel="noopener noreferrer">doi:10.1073/pnas.79.8.2554</a></li>
+          <li><span class="ref-era">Connectionism</span>Ackley, D. H., Hinton, G. E., &amp; Sejnowski, T. J. (1985). A learning algorithm for Boltzmann machines. <em>Cognitive Science</em>. <a href="https://doi.org/10.1207/s15516709cog0901_7" target="_blank" rel="noopener noreferrer">doi:10.1207/s15516709cog0901_7</a></li>
+          <li><span class="ref-era">Connectionism</span>Rumelhart, D. E., Hinton, G. E., &amp; Williams, R. J. (1986). Learning representations by back-propagating errors. <em>Nature</em>. <a href="https://doi.org/10.1038/323533a0" target="_blank" rel="noopener noreferrer">doi:10.1038/323533a0</a></li>
+          <li><span class="ref-era">Connectionism</span>Cybenko, G. (1989). Approximation by superpositions of a sigmoidal function. <em>Mathematics of Control, Signals and Systems</em>. <a href="https://doi.org/10.1007/BF02551274" target="_blank" rel="noopener noreferrer">doi:10.1007/BF02551274</a></li>
+          <li><span class="ref-era">Connectionism</span>Fukushima, K. (1980). Neocognitron: A self-organizing neural network model for a mechanism of pattern recognition unaffected by shift in position. <em>Biological Cybernetics</em>. <a href="https://doi.org/10.1007/BF00344251" target="_blank" rel="noopener noreferrer">doi:10.1007/BF00344251</a></li>
+          <li><span class="ref-era">Connectionism</span>LeCun, Y., Bottou, L., Bengio, Y., &amp; Haffner, P. (1998). Gradient-based learning applied to document recognition. <em>Proceedings of the IEEE</em>. <a href="https://doi.org/10.1109/5.726791" target="_blank" rel="noopener noreferrer">doi:10.1109/5.726791</a></li>
+          <li><span class="ref-era">Connectionism</span>Elman, J. L. (1990). Finding structure in time. <em>Cognitive Science</em>. <a href="https://doi.org/10.1207/s15516709cog1402_1" target="_blank" rel="noopener noreferrer">doi:10.1207/s15516709cog1402_1</a></li>
+          <li><span class="ref-era">Connectionism</span>Hochreiter, S., &amp; Schmidhuber, J. (1997). Long short-term memory. <em>Neural Computation</em>. <a href="https://doi.org/10.1162/neco.1997.9.8.1735" target="_blank" rel="noopener noreferrer">doi:10.1162/neco.1997.9.8.1735</a></li>
+          <li><span class="ref-era">Connectionism</span>Gers, F. A., Schmidhuber, J., &amp; Cummins, F. (2000). Learning to forget: Continual prediction with LSTM. <em>Neural Computation</em>. <a href="https://doi.org/10.1162/089976600300015015" target="_blank" rel="noopener noreferrer">doi:10.1162/089976600300015015</a></li>
+          <li><span class="ref-era">Deep learning</span>Hinton, G. E., Osindero, S., &amp; Teh, Y. W. (2006). A fast learning algorithm for deep belief nets. <em>Neural Computation</em>. <a href="https://doi.org/10.1162/neco.2006.18.7.1527" target="_blank" rel="noopener noreferrer">doi:10.1162/neco.2006.18.7.1527</a></li>
+          <li><span class="ref-era">Deep learning</span>Glorot, X., &amp; Bengio, Y. (2010). Understanding the difficulty of training deep feedforward neural networks. <em>AISTATS</em>. <a href="https://proceedings.mlr.press/v9/glorot10a.html" target="_blank" rel="noopener noreferrer">proceedings.mlr.press/v9/glorot10a.html</a></li>
+          <li><span class="ref-era">Deep learning</span>Krizhevsky, A., Sutskever, I., &amp; Hinton, G. E. (2012). ImageNet classification with deep convolutional neural networks. <em>NeurIPS</em>. <a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks" target="_blank" rel="noopener noreferrer">NeurIPS 2012</a></li>
+          <li><span class="ref-era">Deep learning</span>Srivastava, N., Hinton, G., Krizhevsky, A., Sutskever, I., &amp; Salakhutdinov, R. (2014). Dropout: A simple way to prevent neural networks from overfitting. <em>JMLR</em>. <a href="https://jmlr.org/papers/v15/srivastava14a.html" target="_blank" rel="noopener noreferrer">jmlr.org/papers/v15/srivastava14a.html</a></li>
+          <li><span class="ref-era">Deep learning</span>Ioffe, S., &amp; Szegedy, C. (2015). Batch normalization. <a href="https://arxiv.org/abs/1502.03167" target="_blank" rel="noopener noreferrer">arXiv:1502.03167</a></li>
+          <li><span class="ref-era">Deep learning</span>He, K., Zhang, X., Ren, S., &amp; Sun, J. (2015). Delving deep into rectifiers. <a href="https://arxiv.org/abs/1502.01852" target="_blank" rel="noopener noreferrer">arXiv:1502.01852</a></li>
+          <li><span class="ref-era">Deep learning</span>He, K., Zhang, X., Ren, S., &amp; Sun, J. (2016). Deep residual learning for image recognition. <a href="https://arxiv.org/abs/1512.03385" target="_blank" rel="noopener noreferrer">arXiv:1512.03385</a></li>
+          <li><span class="ref-era">Deep learning</span>Kingma, D. P., &amp; Ba, J. (2015). Adam: A method for stochastic optimization. <a href="https://arxiv.org/abs/1412.6980" target="_blank" rel="noopener noreferrer">arXiv:1412.6980</a></li>
+          <li><span class="ref-era">Deep learning</span>Loshchilov, I., &amp; Hutter, F. (2019). Decoupled weight decay regularization. <a href="https://arxiv.org/abs/1711.05101" target="_blank" rel="noopener noreferrer">arXiv:1711.05101</a></li>
+          <li><span class="ref-era">Deep learning</span>Mikolov, T., Chen, K., Corrado, G., &amp; Dean, J. (2013). Efficient estimation of word representations in vector space. <a href="https://arxiv.org/abs/1301.3781" target="_blank" rel="noopener noreferrer">arXiv:1301.3781</a></li>
+          <li><span class="ref-era">Deep learning</span>Pennington, J., Socher, R., &amp; Manning, C. D. (2014). GloVe: Global vectors for word representation. <a href="https://aclanthology.org/D14-1162/" target="_blank" rel="noopener noreferrer">ACL Anthology D14-1162</a></li>
+          <li><span class="ref-era">Deep learning</span>Sutskever, I., Vinyals, O., &amp; Le, Q. V. (2014). Sequence to sequence learning with neural networks. <a href="https://arxiv.org/abs/1409.3215" target="_blank" rel="noopener noreferrer">arXiv:1409.3215</a></li>
+          <li><span class="ref-era">Deep learning</span>Bahdanau, D., Cho, K., &amp; Bengio, Y. (2015). Neural machine translation by jointly learning to align and translate. <a href="https://arxiv.org/abs/1409.0473" target="_blank" rel="noopener noreferrer">arXiv:1409.0473</a></li>
+          <li><span class="ref-era">Deep learning</span>Cho, K., et al. (2014). Learning phrase representations using RNN encoder–decoder for statistical machine translation. <a href="https://arxiv.org/abs/1406.1078" target="_blank" rel="noopener noreferrer">arXiv:1406.1078</a></li>
+          <li><span class="ref-era">Deep learning</span>Silver, D., et al. (2016). Mastering the game of Go with deep neural networks and tree search. <em>Nature</em>. <a href="https://doi.org/10.1038/nature16961" target="_blank" rel="noopener noreferrer">doi:10.1038/nature16961</a></li>
+          <li><span class="ref-era">Deep learning</span>LeCun, Y., Bengio, Y., &amp; Hinton, G. (2015). Deep learning. <em>Nature</em>. <a href="https://doi.org/10.1038/nature14539" target="_blank" rel="noopener noreferrer">doi:10.1038/nature14539</a></li>
+          <li><span class="ref-era">Transformers</span>Vaswani, A., et al. (2017). Attention is all you need. <a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener noreferrer">arXiv:1706.03762</a></li>
+          <li><span class="ref-era">Transformers</span>Devlin, J., Chang, M.-W., Lee, K., &amp; Toutanova, K. (2019). BERT: Pre-training of deep bidirectional transformers. <a href="https://arxiv.org/abs/1810.04805" target="_blank" rel="noopener noreferrer">arXiv:1810.04805</a></li>
+          <li><span class="ref-era">Transformers</span>Radford, A., Narasimhan, K., Salimans, T., &amp; Sutskever, I. (2018). Improving language understanding by generative pre-training. <a href="https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf" target="_blank" rel="noopener noreferrer">OpenAI GPT paper</a></li>
+          <li><span class="ref-era">Transformers</span>Raffel, C., et al. (2020). Exploring the limits of transfer learning with a unified text-to-text transformer. <a href="https://arxiv.org/abs/1910.10683" target="_blank" rel="noopener noreferrer">arXiv:1910.10683</a></li>
+          <li><span class="ref-era">Transformers</span>Lewis, M., et al. (2019). BART: Denoising sequence-to-sequence pre-training. <a href="https://arxiv.org/abs/1910.13461" target="_blank" rel="noopener noreferrer">arXiv:1910.13461</a></li>
+          <li><span class="ref-era">Transformers</span>Dosovitskiy, A., et al. (2021). An image is worth 16×16 words: Transformers for image recognition at scale. <a href="https://arxiv.org/abs/2010.11929" target="_blank" rel="noopener noreferrer">arXiv:2010.11929</a></li>
+          <li><span class="ref-era">Transformers</span>Su, J., et al. (2021). RoFormer: Enhanced transformer with rotary position embedding. <a href="https://arxiv.org/abs/2104.09864" target="_blank" rel="noopener noreferrer">arXiv:2104.09864</a></li>
+          <li><span class="ref-era">Transformers</span>Press, O., Smith, N. A., &amp; Lewis, M. (2022). Train short, test long: Attention with linear biases. <a href="https://arxiv.org/abs/2108.12409" target="_blank" rel="noopener noreferrer">arXiv:2108.12409</a></li>
+          <li><span class="ref-era">Transformers</span>Xiong, R., et al. (2020). On layer normalization in the transformer architecture. <a href="https://arxiv.org/abs/2002.04745" target="_blank" rel="noopener noreferrer">arXiv:2002.04745</a></li>
+          <li><span class="ref-era">Transformers</span>Sennrich, R., Haddow, B., &amp; Birch, A. (2016). Neural machine translation of rare words with subword units. <a href="https://arxiv.org/abs/1508.07909" target="_blank" rel="noopener noreferrer">arXiv:1508.07909</a></li>
+          <li><span class="ref-era">Transformers</span>Kudo, T., &amp; Richardson, J. (2018). SentencePiece. <a href="https://arxiv.org/abs/1808.06226" target="_blank" rel="noopener noreferrer">arXiv:1808.06226</a></li>
+          <li><span class="ref-era">Transformers</span>Kaplan, J., et al. (2020). Scaling laws for neural language models. <a href="https://arxiv.org/abs/2001.08361" target="_blank" rel="noopener noreferrer">arXiv:2001.08361</a></li>
+          <li><span class="ref-era">Transformers</span>Hoffmann, J., et al. (2022). Training compute-optimal large language models. <a href="https://arxiv.org/abs/2203.15556" target="_blank" rel="noopener noreferrer">arXiv:2203.15556</a></li>
+          <li><span class="ref-era">Transformers</span>Fedus, W., Zoph, B., &amp; Shazeer, N. (2022). Switch transformers. <a href="https://arxiv.org/abs/2101.03961" target="_blank" rel="noopener noreferrer">arXiv:2101.03961</a></li>
+          <li><span class="ref-era">Generative AI</span>Goodfellow, I., et al. (2014). Generative adversarial nets. <a href="https://arxiv.org/abs/1406.2661" target="_blank" rel="noopener noreferrer">arXiv:1406.2661</a></li>
+          <li><span class="ref-era">Generative AI</span>Kingma, D. P., &amp; Welling, M. (2014). Auto-encoding variational Bayes. <a href="https://arxiv.org/abs/1312.6114" target="_blank" rel="noopener noreferrer">arXiv:1312.6114</a></li>
+          <li><span class="ref-era">Generative AI</span>Ho, J., Jain, A., &amp; Abbeel, P. (2020). Denoising diffusion probabilistic models. <a href="https://arxiv.org/abs/2006.11239" target="_blank" rel="noopener noreferrer">arXiv:2006.11239</a></li>
+          <li><span class="ref-era">Generative AI</span>Rombach, R., Blattmann, A., Lorenz, D., Esser, P., &amp; Ommer, B. (2022). High-resolution image synthesis with latent diffusion models. <a href="https://arxiv.org/abs/2112.10752" target="_blank" rel="noopener noreferrer">arXiv:2112.10752</a></li>
+          <li><span class="ref-era">Generative AI</span>Radford, A., et al. (2021). Learning transferable visual models from natural language supervision. <a href="https://arxiv.org/abs/2103.00020" target="_blank" rel="noopener noreferrer">arXiv:2103.00020</a></li>
+          <li><span class="ref-era">Generative AI</span>Hendrycks, D., &amp; Gimpel, K. (2016). Gaussian error linear units. <a href="https://arxiv.org/abs/1606.08415" target="_blank" rel="noopener noreferrer">arXiv:1606.08415</a></li>
+          <li><span class="ref-era">Language models</span>Brown, T., et al. (2020). Language models are few-shot learners. <a href="https://arxiv.org/abs/2005.14165" target="_blank" rel="noopener noreferrer">arXiv:2005.14165</a></li>
+          <li><span class="ref-era">Language models</span>Christiano, P., et al. (2017). Deep reinforcement learning from human preferences. <a href="https://arxiv.org/abs/1706.03741" target="_blank" rel="noopener noreferrer">arXiv:1706.03741</a></li>
+          <li><span class="ref-era">Language models</span>Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback. <a href="https://arxiv.org/abs/2203.02155" target="_blank" rel="noopener noreferrer">arXiv:2203.02155</a></li>
+          <li><span class="ref-era">Language models</span>Bai, Y., et al. (2022). Constitutional AI: Harmlessness from AI feedback. <a href="https://arxiv.org/abs/2212.08073" target="_blank" rel="noopener noreferrer">arXiv:2212.08073</a></li>
+          <li><span class="ref-era">Language models</span>Rafailov, R., et al. (2023). Direct preference optimization. <a href="https://arxiv.org/abs/2305.18290" target="_blank" rel="noopener noreferrer">arXiv:2305.18290</a></li>
+          <li><span class="ref-era">Language models</span>Wei, J., et al. (2022). Chain-of-thought prompting elicits reasoning in large language models. <a href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener noreferrer">arXiv:2201.11903</a></li>
+          <li><span class="ref-era">Language models</span>Schaeffer, R., Miranda, B., &amp; Koyejo, S. (2023). Are emergent abilities of large language models a mirage? <a href="https://arxiv.org/abs/2304.15004" target="_blank" rel="noopener noreferrer">arXiv:2304.15004</a></li>
+          <li><span class="ref-era">Language models</span>Hu, E. J., et al. (2021). LoRA: Low-rank adaptation of large language models. <a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener noreferrer">arXiv:2106.09685</a></li>
+          <li><span class="ref-era">Language models</span>Dettmers, T., Pagnoni, A., Holtzman, A., &amp; Zettlemoyer, L. (2023). QLoRA. <a href="https://arxiv.org/abs/2305.14314" target="_blank" rel="noopener noreferrer">arXiv:2305.14314</a></li>
+          <li><span class="ref-era">Language models</span>OpenAI. (2024). Learning to reason with LLMs. <a href="https://openai.com/index/learning-to-reason-with-llms/" target="_blank" rel="noopener noreferrer">openai.com</a></li>
+          <li><span class="ref-era">RAG</span>Lewis, P., et al. (2020). Retrieval-augmented generation for knowledge-intensive NLP tasks. <a href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noopener noreferrer">arXiv:2005.11401</a></li>
+          <li><span class="ref-era">RAG</span>Karpukhin, V., et al. (2020). Dense passage retrieval for open-domain question answering. <a href="https://arxiv.org/abs/2004.04906" target="_blank" rel="noopener noreferrer">arXiv:2004.04906</a></li>
+          <li><span class="ref-era">RAG</span>Guu, K., Lee, K., Tung, Z., Pasupat, P., &amp; Chang, M.-W. (2020). REALM: Retrieval-augmented language model pre-training. <a href="https://arxiv.org/abs/2002.08909" target="_blank" rel="noopener noreferrer">arXiv:2002.08909</a></li>
+          <li><span class="ref-era">RAG</span>Borgeaud, S., et al. (2022). Improving language models by retrieving from trillions of tokens. <a href="https://arxiv.org/abs/2112.04426" target="_blank" rel="noopener noreferrer">arXiv:2112.04426</a></li>
+          <li><span class="ref-era">RAG</span>Robertson, S., &amp; Zaragoza, H. (2009). The probabilistic relevance framework: BM25 and beyond. <em>Foundations and Trends in Information Retrieval</em>. <a href="https://doi.org/10.1561/1500000019" target="_blank" rel="noopener noreferrer">doi:10.1561/1500000019</a></li>
+          <li><span class="ref-era">RAG</span>Malkov, Y. A., &amp; Yashunin, D. A. (2020). Efficient and robust approximate nearest neighbor search using hierarchical navigable small world graphs. <em>IEEE TPAMI</em>. <a href="https://arxiv.org/abs/1603.09320" target="_blank" rel="noopener noreferrer">arXiv:1603.09320</a></li>
+          <li><span class="ref-era">RAG</span>Nogueira, R., &amp; Cho, K. (2019). Passage re-ranking with BERT. <a href="https://arxiv.org/abs/1901.04085" target="_blank" rel="noopener noreferrer">arXiv:1901.04085</a></li>
+          <li><span class="ref-era">RAG</span>Gao, L., Ma, X., Lin, J., &amp; Callan, J. (2022). Precise zero-shot dense retrieval without relevance labels. <a href="https://arxiv.org/abs/2212.10496" target="_blank" rel="noopener noreferrer">arXiv:2212.10496</a></li>
+          <li><span class="ref-era">RAG</span>Liu, N. F., et al. (2023). Lost in the middle: How language models use long contexts. <a href="https://arxiv.org/abs/2307.03172" target="_blank" rel="noopener noreferrer">arXiv:2307.03172</a></li>
+          <li><span class="ref-era">RAG</span>Edge, D., et al. (2024). From local to global: A Graph RAG approach. <a href="https://arxiv.org/abs/2404.16130" target="_blank" rel="noopener noreferrer">arXiv:2404.16130</a></li>
+          <li><span class="ref-era">Agents</span>Yao, S., et al. (2023). ReAct: Synergizing reasoning and acting in language models. <a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener noreferrer">arXiv:2210.03629</a></li>
+          <li><span class="ref-era">Agents</span>Yao, S., et al. (2023). Tree of Thoughts: Deliberate problem solving with large language models. <a href="https://arxiv.org/abs/2305.10601" target="_blank" rel="noopener noreferrer">arXiv:2305.10601</a></li>
+          <li><span class="ref-era">Agents</span>Schick, T., et al. (2023). Toolformer: Language models can teach themselves to use tools. <a href="https://arxiv.org/abs/2302.04761" target="_blank" rel="noopener noreferrer">arXiv:2302.04761</a></li>
+          <li><span class="ref-era">Agents</span>Shinn, N., et al. (2023). Reflexion: Language agents with verbal reinforcement learning. <a href="https://arxiv.org/abs/2303.11366" target="_blank" rel="noopener noreferrer">arXiv:2303.11366</a></li>
+          <li><span class="ref-era">Agents</span>Park, J. S., et al. (2023). Generative agents: Interactive simulacra of human behavior. <a href="https://arxiv.org/abs/2304.03442" target="_blank" rel="noopener noreferrer">arXiv:2304.03442</a></li>
+          <li><span class="ref-era">Agents</span>Wang, G., et al. (2023). Voyager: An open-ended embodied agent with large language models. <a href="https://arxiv.org/abs/2305.16291" target="_blank" rel="noopener noreferrer">arXiv:2305.16291</a></li>
+          <li><span class="ref-era">Agents</span>Anthropic. (2024). Introducing the Model Context Protocol. <a href="https://www.anthropic.com/news/model-context-protocol" target="_blank" rel="noopener noreferrer">anthropic.com</a></li>
+          <li><span class="ref-era">Mutations</span>Stanley, K. O., &amp; Miikkulainen, R. (2002). Evolving neural networks through augmenting topologies. <em>Evolutionary Computation</em>. <a href="https://doi.org/10.1162/106365602320169811" target="_blank" rel="noopener noreferrer">doi:10.1162/106365602320169811</a></li>
+          <li><span class="ref-era">Mutations</span>Zoph, B., &amp; Le, Q. V. (2017). Neural architecture search with reinforcement learning. <a href="https://arxiv.org/abs/1611.01578" target="_blank" rel="noopener noreferrer">arXiv:1611.01578</a></li>
+        </ol>
+      </section>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-note">An educational synthesis of the public research record. It is not a substitute for the papers above. Cited works remain under their authors’ and publishers’ terms. </p>
+      <p class="footer-copyright">© 2026 <a href="https://prateekdutta2001.github.io/PrateekDutta.in/" target="_blank" rel="noopener noreferrer">PRATEEK DUTTA</a>. This work is MIT Licensed Copyrighted.</p>
+    </div>
+  </footer>
+  <script src="js/app.js"></script>
+</body>
+</html>
